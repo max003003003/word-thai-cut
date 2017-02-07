@@ -10,11 +10,13 @@ const regexDay3 = /(วัน|วันที่|)(   |  | |)(จันทร์
 //var text3 = ['จันทร์ นี้ ไป โร','มีนา 29 ไป สอบ',' เมษา จ่ายค่าบ้าน '] 
 //var text3 = ['จันทร์ นี้ ไป โร มีนา 29 ไป สอบ  เมษา จ่ายค่าบ้าน '] 
 
-var text3 = ['จันทร์ นี้ ไป โร ','มีนา 29 ไป สอบ 9 โมง ','เมษา จ่ายค่าบ้าน ','วันที่ 5 มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันจันทร์ ที่ 12  11:00 นาฬิกา']
+var text3 = ['10 ไป10','10.00','จันทร์ นี้ ไป โร' ,'7 โมงงง','ธันวา','มีนา 29 ไป สอบ 9 โมง ','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา']
 const cutNull = function (s){
-  return s!==null&& s!==undefined 
+  
+  return s!==null && s!==undefined 
 }
-const isSpace = function(v){         
+const isSpace = function(v){ 
+             
        return (v!=="")&&(v!==" ")&&(v!=="   ")
 }
 const cutNumber = function(v) {
@@ -72,8 +74,9 @@ function convertDateToNumber( s ) {
     const date = [/จันทร์/,/อังคาร/,/พุทธ/,/พฤหัส/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
     const dateNumbers = /(\d\d|\d)/
     const month = [/มกรา/,/กุมภา/,/มีนา/,/เมษา/,/พฤษภา/,/มิถุนา/,/กรกฎา/,/สิงหา/,/กันยา/,/ตุลา/,/พฤศจิกา/,/ธันวา/]
+    const dateEng = ['monday','tuesday','wednes','thursday','friday','saturday','sunday']
    
-    const dateresult= date.map( (v , j)=> {
+     const dateresult= date.map( (v , j)=> {
       if(v.test(s) !== false )
       {
         return j+1
@@ -82,7 +85,7 @@ function convertDateToNumber( s ) {
     const monthresult = month.map( (v , j)=>{
      if(  v.test(s) !== false )
       {
-        return j+1
+        return j
       }
   }).filter(cutNull)
     
@@ -91,10 +94,19 @@ function convertDateToNumber( s ) {
       if(cv !== null) 
       return  cv[0]      
      else return '' } ).filter(isSpace) 
+
+      
+
+
+
     
    const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0]  }
    console.log(result)
 
+   
+   createTimeObject( result )
+  
+ 
  
 }
 
@@ -116,5 +128,33 @@ function convertTime( s ) {
      const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
 
 }
+  
+ function createTimeObject(result)
+ {
+   
+   let  dateR = moment()
+   if( !isNaN(result.datenumber) && result.date === undefined && result.month === undefined)
+     {          
+       dateR = moment().date(result.datenumber)
+       console.log('Match Date number ',dateR)
+    }
+    else  if( isNaN(result.datenumber) && result.date !== undefined && result.month === undefined)
+     {          
+      if( moment().isoWeekday() >= result.date )
+      {
+          dateR = moment().add(1,'week').isoWeekday(result.date)
+      }
+      else
+      {
+         dateR = moment().isoWeekday(result.date)
+      }
+        console.log('Match day of week',dateR)
+    }
+    else if( isNaN(result.datenumber) && result.date === undefined && result.month !== undefined)
+     {          
+         dateR = moment().month(result.month).date(1)
+         console.log('Match Month  ',dateR)
+     }
 
-//suggest while typing 
+  
+ }
