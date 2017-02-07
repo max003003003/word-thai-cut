@@ -1,0 +1,1 @@
+word-thai-cut
