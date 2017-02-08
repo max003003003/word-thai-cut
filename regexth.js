@@ -61,7 +61,7 @@ function createTimeWithCheck( timeR, hr ){
     } 
 }
  
-function convertTimeTonumber( s ) {
+function convertTimeToNumber( s ) {
      const timeNumber =   /(\d\d|\d)/gi
      const mong = /โมง/
      const bai = /บ่าย/
@@ -81,30 +81,25 @@ function convertTimeTonumber( s ) {
         if(timeR[0]<6){
           return createTimeWithCheck(timeR,6) 
         }else if(timeR[0]!=6 ){
-              return createTimeWithCheck(timeR,0)    
-          }else {
-              if(timeR.length==2){
-                return { 'H':timeR[0] , 'm':timeR[1] , 'o' : 'chao or yen' }
-              }else {
-                return { 'H':timeR[0], 'm': 0 , 'o' : 'chao or yen'  }
-              }
-        }       
-      
-    }else {
+                   return createTimeWithCheck(timeR,0)    
+              }else{
+                    if(timeR.length==2){
+                      return { 'H':timeR[0] , 'm':timeR[1] , 'o' : 'chao or yen' }
+                    }else {
+                      return { 'H':timeR[0], 'm': 0 , 'o' : 'chao or yen'  }
+                    }
+             }             
+    }else{
        return createTimeWithCheck(timeR,0)    
      }      
-  })
-   
+  })   
    const result = {'input': s, 'result': ac}
-     console.log('ttt',result)
+  // console.log('ttt',result)
   return result
-   //  const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
-    // const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
-
 }
 
-function convertDateToNumber( s ) { 
-    console.log(s)
+function convertDateToNumber( s ) {   //return {input,[]result }
+   // console.log(s)
     const date = [/จันทร์/,/อังคาร/,/พุทธ/,/พฤหัส/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
     const dateNumbers = /(\d\d|\d)/
     const month = [/มกรา/,/กุมภา/,/มีนา/,/เมษา/,/พฤษภา/,/มิถุนา/,/กรกฎา/,/สิงหา/,/กันยา/,/ตุลา/,/พฤศจิกา/,/ธันวา/]
@@ -129,8 +124,8 @@ function convertDateToNumber( s ) {
       return  cv[0]      
      else return '' } ).filter(isSpace)     
    const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0]  }
-   console.log(result)
-  const timeObj=  { 'time': createTimeObject( result ) , 'strDate': s }
+  // console.log(result)
+  const timeObj=  { 'time': result  , 'strDate': s }
   return timeObj 
 }
 
@@ -143,7 +138,7 @@ function convertTime( s ) {
      {
        const result = /(\d\d|\d)/
        const resultMatch = s.match(result)
-       console.log(resultMatch[0])
+      // console.log(resultMatch[0])
      }
 
      const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
@@ -151,81 +146,94 @@ function convertTime( s ) {
 
 }
   
- function createTimeObject(result)
+ function createTimeObject(date,h,m)
  {
-   
-    // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
-   if( ( !isNaN(result.datenumber) && result.date === undefined && result.month === undefined ) || ( !isNaN(result.datenumber) && result.date !== undefined && result.month === undefined ) )
-     {          
-       const dateR = moment().date(result.datenumber)
-       return dateR
-       //console.log('Match Date number ',dateR)
-    }
-    else 
-        // วัน อังคาร   ==> เดือนนี้
-     if( isNaN(result.datenumber) && result.date !== undefined && result.month === undefined)
-     {          
-      if( moment().isoWeekday() >= result.date )
-      {
-          const dateR = moment().add(1,'week').isoWeekday(result.date)
+      
+        // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
+      if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {          
+          const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
           return dateR
+          //console.log('Match Date number ',dateR)
+      } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้        
+              if( moment().isoWeekday() >= date.date ) {        
+                  const dateR = moment().add(1,'week').isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                  return dateR
+              } else  {
+                const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                return dateR
+              }           
+                //console.log('Match day of week',dateR)
+    } else  if( isNaN(date.datenumber) && date.date === undefined && date.month !== undefined)     {            // มีนาคม ==> วันแรก ของ เดือนนั้นๆ
+            const dateR = moment().month(date.month).date(1).hour(parseInt(h)).minute(parseInt(m))
+            return dateR
+            //console.log('Match Month  ',dateR)
+    } else if( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined)   {          
+          const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
+          return dateR
+          //console.log('Match Date number ',dateR)
+    } else if( ( !isNaN(date.datenumber) && date.date !== undefined && date.month !== undefined ) || (!isNaN(date.datenumber) && date.date === undefined && date.month !== undefined) )  {  //วัน จันทร์ 14 มีนา or 15 เมษา  => มีวันที่แล้ว
+          const dateR = moment().date(date.datenumber).month(date.month).hour(parseInt(h)).minute(parseInt(m))
+          return dateR
+          //console.log('datenumber date month',dateR)
+    } else if(  isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) { //ไม่ระบุ วันที่  
+        const dateR = moment().hour(parseInt(h)).minute(parseInt(m))       
+        return dateR
       }
-      else
-      {
-         const dateR = moment().isoWeekday(result.date)
-         return dateR
-      }
-        
-        //console.log('Match day of week',dateR)
-    }
-    else
-       // มีนาคม ==> วันแรก ของ เดือนนั้นๆ
-     if( isNaN(result.datenumber) && result.date === undefined && result.month !== undefined)
-     {          
-         const dateR = moment().month(result.month).date(1)
-         return dateR
-         //console.log('Match Month  ',dateR)
-     }
-     else if( !isNaN(result.datenumber) && result.date !== undefined && result.month === undefined)
-     {          
-       const dateR = moment().date(result.datenumber)
-       return dateR
-       //console.log('Match Date number ',dateR)
-    }
-    //วัน จันทร์ 14 มีนา or 15 เมษา  => มีวันที่แล้ว
-   if( ( !isNaN(result.datenumber) && result.date !== undefined && result.month !== undefined ) || (!isNaN(result.datenumber) && result.date === undefined && result.month !== undefined) )
-   {
-       const dateR = moment().date(result.datenumber).month(result.month)
-       return dateR
-       //console.log('datenumber date month',dateR)
-
-   }
- }
-function dateMatchRegex (s){  
- return s.map( dateRegex ) 
-} 
-
-
-
-
+}
+ 
 //======================== Usage ==================================//
+
+// let ac= text3.map( timeRegex )
  
-const ab = dateMatchRegex(text3)  //text => match regex
-const ac=text3.map( timeRegex )
+// ac = ac.map((v) =>convertTimeToNumber(v))
+
+// console.log('=========================Date===================================')
+// ab.forEach((v)=>{
+//   console.log('time',v)
+// })
+
+// console.log("===========================Time================================")
+// ac.forEach((v) =>{
+//   console.log(v)
+// })
+
+// console.log("========start test =================")
+// console.log(ab.map((v) => convertDateToNumber(v)) )
+// const abc = ab.map((v) => convertDateToNumber(v))
+// abc.map((v)=> console.log(v))
+
+function mergeAndCreateDateAndTime ( time, date) 
+{
+     if(time.result.length!=0){
+        return time.result.map( (v) => {         
+          if(v !== undefined )                 
+          return createTimeObject(date.time,v.H,v.m)
+        })
+     } else {        
+       if( date.strDate.length!=0)
+       return createTimeObject(date.time,7,0)
+     }
+
+}
+function thaiRegexTime( v ) {       
+    
+          const resultTime  = convertTimeToNumber(timeRegex(v))
+          const resultDate =  convertDateToNumber(dateRegex(v))
+          //console.log("-----------------------------------------")
+          //console.log('input ',v)
+          //console.log('result date \n', resultDate,'\n result time \n', resultTime)
+          const a = mergeAndCreateDateAndTime(resultTime,resultDate)
+          //console.log('output',a)
+          //console.log("-----------------------------------------")
+
+          const result =  {'input': v , 'output': a }
+          //console.log(result) 
+         return   result
+}
+
+const testSet1 = text3.map( (v) =>  thaiRegexTime(v)  )
+
+console.log(...testSet1)
+
+
  
-ac.map((v) =>convertTimeTonumber(v))
-
-console.log('=========================Date===================================')
-ab.forEach((v)=>{
-  console.log(v)
-})
-
-console.log("===========================Time================================")
-ac.forEach((v) =>{
-  console.log(v)
-})
-
-console.log("========start test =================")
-console.log(ab.map((v) => convertDateToNumber(v)) )
-const abc = ab.map((v) => convertDateToNumber(v))
-abc.map((v)=> console.log(v))
