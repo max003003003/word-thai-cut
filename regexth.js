@@ -14,7 +14,7 @@ Array.prototype.flatMap = function(lambda) {
     return Array.prototype.concat.apply([], this.map(lambda)); 
 }
 
-var text3 = ['10 ไป10','10.00','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา','มีนา 29 ไป สอบ 9 โมง ','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
+var text3 = ['10 ไป10','7 โมงเช้า 6โมงเจอกัน ','10.00 บ่าย 3 บ่าย 4 โมง 3 ทุ่ม 9.56 น. ตี 2  6 โมงเย็น ','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา','มีนา 29 ไป สอบ 9 โมง ','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
 const cutNull = function (s){
   
   return s!==null && s!==undefined 
@@ -29,14 +29,12 @@ const cutNumber = function(v) {
 
 
 function timeRegex(s) {
-     const regexTime =  /([1-2][0-9]|[0-9])(   |  | |)โมง/gi
-     const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
-     const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
+     const regexTime =  /([1-2][0-9]|[0-9])(   |  | |)(โมง|ทุ่ม)(   |  | |)(เย็น|เช้า|)/gi
+     const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])(   |  | |)(โมง|ทุ่ม|)/gi
+     const regexTime3 = /(1?[0-9]|2[0-3])(:|.)[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
      const regexTime4 = [ regexTime, regexTime2, regexTime3 ]
-     const resultTimeRegex = regexTime4.map((v)=> s.match(v)).filter(cutNull).flatMap( (v) => v )
-   
-     //console.log('resulttime',resultTimeRegex)
-    
+     const resultTimeRegex = regexTime4.map((v)=> s.match(v)).filter(cutNull).flatMap( (v) => v )  
+     //console.log('resulttime',resultTimeRegex)   
      return  resultTimeRegex
 }
  
@@ -54,6 +52,55 @@ function dateRegex (s) {
     //console.log(resulRegex)
     const size = resulRegex.map((v)=> v.length )   
     return resulRegex[size.indexOf(Math.min(...size))].map((c) => c.trim()).filter(cutNumber) 
+}
+function createTimeWithCheck( timeR, hr ){
+    if(timeR.length==2){
+              return { 'H':(parseInt( timeR[0])+hr).toString() , 'm':timeR[1] }
+    }else {
+              return { 'H':(parseInt( timeR[0])+hr).toString(), 'm': 0 }
+    } 
+}
+ 
+function convertTimeTonumber( s ) {
+     const timeNumber =   /(\d\d|\d)/gi
+     const mong = /โมง/
+     const bai = /บ่าย/
+     const tee = /ตี/
+     const toom = /ทุ่ม/
+     const shao = /เช้า/
+     const yen = /เย็น/       
+     const ac= s.map( (v) =>{    
+     const timeR= v.match(timeNumber)    
+     if( bai.test(v) || yen.test(v) ) {
+        return createTimeWithCheck(timeR,12)           
+     }else if(tee.test(v)) {
+        return createTimeWithCheck(timeR,0)    
+     }else if(toom.test(v)) {       
+        return createTimeWithCheck(timeR,18)    
+     }else if( mong.test(v)) {     
+        if(timeR[0]<6){
+          return createTimeWithCheck(timeR,6) 
+        }else if(timeR[0]!=6 ){
+              return createTimeWithCheck(timeR,0)    
+          }else {
+              if(timeR.length==2){
+                return { 'H':timeR[0] , 'm':timeR[1] , 'o' : 'chao or yen' }
+              }else {
+                return { 'H':timeR[0], 'm': 0 , 'o' : 'chao or yen'  }
+              }
+        }       
+      
+    }else {
+       return createTimeWithCheck(timeR,0)    
+     }      
+  })
+   
+   const result = {'input': s, 'result': ac}
+     console.log('ttt',result)
+  return result
+   //  const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
+    // const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
+
 }
 
 function convertDateToNumber( s ) { 
@@ -90,8 +137,7 @@ function convertDateToNumber( s ) {
 
 function convertTime( s ) {
     if (s===[] ) return 
-     const regexTime =  /([1-2][0-9]|[0-9])(   |  | |)โมง/gi
-
+     const regexTime =  /([1-2][0-9]|[0-9])(   |  | |)โมง/gi 
 
      if(regexTime.test(s) !== false )
      {
@@ -166,6 +212,8 @@ function dateMatchRegex (s){
  
 const ab = dateMatchRegex(text3)  //text => match regex
 const ac=text3.map( timeRegex )
+ 
+ac.map((v) =>convertTimeTonumber(v))
 
 console.log('=========================Date===================================')
 ab.forEach((v)=>{
