@@ -211,7 +211,10 @@ function mergeAndCreateDateAndTime ( time, date)
         })
      } else {        
        if( date.strDate.length!=0)
-       return createTimeObject(date.time,7,0)
+          return  date.strDate.map((v) => {
+              return createTimeObject(date.time,7,0)
+           })
+       
      }
 
 }
@@ -221,7 +224,7 @@ function thaiRegexTime( v ) {
           const resultDate =  convertDateToNumber(dateRegex(v))
           //console.log("-----------------------------------------")
           //console.log('input ',v)
-          //console.log('result date \n', resultDate,'\n result time \n', resultTime)
+         //console.log('result date \n', resultDate,'\n result time \n', resultTime)
           const a = mergeAndCreateDateAndTime(resultTime,resultDate)
           //console.log('output',a)
           //console.log("-----------------------------------------")
@@ -235,5 +238,12 @@ const testSet1 = text3.map( (v) =>  thaiRegexTime(v)  )
 
 console.log(...testSet1)
 
-
+testSet1.forEach( (v) => {
+  if(v.output!==undefined){
+      v.output.forEach( (f) => {
+        if(f!= undefined)
+        console.log(f.locale('th').format("dddd, MMMM Do YYYY, h:mm:ss a"))
+         })
+   }
+}) 
  
