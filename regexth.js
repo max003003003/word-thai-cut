@@ -7,16 +7,11 @@ const regexDate = /วันที่(| |  |   )([1-9]|[0-9][0-9])/gi
 const regexMonth = /(|เดือน)(| |  |   )(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา)(คม|ยน|)/gi
 const regexDay3 = /(วัน|วันที่|)(   |  | |)(จันทร์|อังคาร|พุทธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(ที่)(   |  | |)([0-9]|[0-9][0-9]|)/gi
 
-//var text3 = ['จันทร์ นี้ ไป โร','มีนา 29 ไป สอบ',' เมษา จ่ายค่าบ้าน '] 
-//var text3 = ['จันทร์ นี้ ไป โร มีนา 29 ไป สอบ  เมษา จ่ายค่าบ้าน '] 
-
 Array.prototype.flatMap = function(lambda) { 
     return Array.prototype.concat.apply([], this.map(lambda)); 
 }
-
-var text3 = ['10 ไป10','7 โมงเช้า 6โมงเจอกัน ','10.00 บ่าย 3 บ่าย 4 โมง 3 ทุ่ม 9.56 น. ตี 2  6 โมงเย็น ','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา','มีนา 29 ไป สอบ 9 โมง ','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
-const cutNull = function (s){
-  
+var text3 = [ '31 เมษายน','10 ไป10','7 โมงเช้า 6โมงเจอกัน ','10.00 บ่าย 3 บ่าย 4 โมง 3 ทุ่ม 9.56 น. ตี 2  6 โมงเย็น ','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา','มีนา 29 ไป สอบ 9 โมง ','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
+const cutNull = function (s){  
   return s!==null && s!==undefined 
 }
 const isSpace = function(v){ 
@@ -59,8 +54,7 @@ function createTimeWithCheck( timeR, hr ){
     }else {
               return { 'H':(parseInt( timeR[0])+hr).toString(), 'm': 0 }
     } 
-}
- 
+} 
 function convertTimeToNumber( s ) {
      const timeNumber =   /(\d\d|\d)/gi
      const mong = /โมง/
@@ -147,8 +141,7 @@ function convertTime( s ) {
 }
   
  function createTimeObject(date,h,m)
- {
-      
+ {      
         // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
       if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {          
           const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
@@ -180,28 +173,6 @@ function convertTime( s ) {
         return dateR
       }
 }
- 
-//======================== Usage ==================================//
-
-// let ac= text3.map( timeRegex )
- 
-// ac = ac.map((v) =>convertTimeToNumber(v))
-
-// console.log('=========================Date===================================')
-// ab.forEach((v)=>{
-//   console.log('time',v)
-// })
-
-// console.log("===========================Time================================")
-// ac.forEach((v) =>{
-//   console.log(v)
-// })
-
-// console.log("========start test =================")
-// console.log(ab.map((v) => convertDateToNumber(v)) )
-// const abc = ab.map((v) => convertDateToNumber(v))
-// abc.map((v)=> console.log(v))
-
 function mergeAndCreateDateAndTime ( time, date) 
 {
      if(time.result.length!=0){
@@ -218,8 +189,7 @@ function mergeAndCreateDateAndTime ( time, date)
      }
 
 }
-function thaiRegexTime( v ) {       
-    
+function thaiRegexTime( v ) {           
           const resultTime  = convertTimeToNumber(timeRegex(v))
           const resultDate =  convertDateToNumber(dateRegex(v))
           //console.log("-----------------------------------------")
@@ -234,6 +204,12 @@ function thaiRegexTime( v ) {
          return   result
 }
 
+function splitWordWithPlusSign( s){
+    const input = s.split("+")
+    return  input.map( v =>  thaiRegexTime(v) )
+    
+}
+
 const testSet1 = text3.map( (v) =>  thaiRegexTime(v)  )
 
 console.log(...testSet1)
@@ -242,8 +218,11 @@ testSet1.forEach( (v) => {
   if(v.output!==undefined){
       v.output.forEach( (f) => {
         if(f!= undefined)
-        console.log(f.locale('th').format("dddd, MMMM Do YYYY, h:mm:ss a"))
+        console.log(f.locale('en').format("dddd, MMMM Do YYYY, h:mm:ss a"))
+         
          })
    }
 }) 
+
+console.log(splitWordWithPlusSign("วันอังคาร ไป โรบินสันนะครับ +วันพุทธ ไป พัทยา"))
  
