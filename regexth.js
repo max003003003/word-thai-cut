@@ -193,13 +193,12 @@ function thaiRegexTime( v ) {
           const resultTime  = convertTimeToNumber(timeRegex(v))
           const resultDate =  convertDateToNumber(dateRegex(v))
           //console.log("-----------------------------------------")
-          //console.log('input ',v)
-         //console.log('result date \n', resultDate,'\n result time \n', resultTime)
+          //console.log('input ',v)         
           const a = mergeAndCreateDateAndTime(resultTime,resultDate)
-          //console.log('output',a)
+         // console.log('output',a)
           //console.log("-----------------------------------------")
 
-          const result =  {'input': v , 'output': a }
+          const result =  {'input': v , 'output': a ,'resultdate':resultDate.strDate,'resultTime':resultTime.input }
           //console.log(result) 
          return   result
 }
@@ -218,10 +217,9 @@ testSet1.forEach( (v) => {
   if(v.output!==undefined){
       v.output.forEach( (f) => {
         if(f!= undefined)
-        console.log(f.locale('en').format("dddd, MMMM Do YYYY, h:mm:ss a"))
-         
-         })
-   }
+        console.log(f.locale('th').format("dddd, MMMM Do YYYY, h:mm:ss "))         
+      })   
+    }
 }) 
 
 console.log(splitWordWithPlusSign("วันอังคาร ไป โรบินสันนะครับ +วันพุทธ ไป พัทยา"))
