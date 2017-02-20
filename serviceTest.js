@@ -8,20 +8,25 @@ app.service('$firebase', ['firebase',function(firebase) {
     storageBucket: "hallo-42e85.appspot.com",
     messagingSenderId: "899590444510"
   };
- firebase.initializeApp(config);
- this.loginWithEmailAndPassword = function() {
-     
+  firebase.initializeApp(config);
+  
+ this.signIn = function(email, password) {
+     firebase.auth().signInWithEmailAndPassword(email,password)
+      .then((result)=>{
+        console.log(result)
+      })
  }
 
- this.signup = function( email, password) {
+ this.signUp = function( email, password) {
    firebase.auth().createUserWithEmailAndPassword(email,password)
     .then( (authdata) => {
       console.log('SignUp',authdata)
     } )
  }
 
- this.loginWithGmail = function() {
 
+ this.loginWithGmail = function(email,password) {
+   // not implement
  }
  
  this.push = function() {
@@ -31,6 +36,29 @@ app.service('$firebase', ['firebase',function(firebase) {
  this.update = function() {
 
  }
+ this.resetPassword= function(email) {
+   const auth = firebase.auth()
+   auth.sendPasswordResetEmail(email).then(function(){
+     console.log("send Success")
+   })
+ }
+
+ this.getCurrentUser = function() {
+   var user = firebase.auth().currentUser;
+  if (user) {
+    return user
+  } else {
+    // No user is signed in.
+  }
+ }
+ this.signOut = function() {
+  firebase.auth().signOut().then(function() {
+  console.log('Signed Out')
+  }, function(error) {
+    console.error('Sign Out Error', error)
+  })
+
+ }
 
  
 }])
@@ -38,18 +66,34 @@ app.service('$firebase', ['firebase',function(firebase) {
  
 app.controller('submit',['$scope', '$firebase',  function($scope , $firebase ){
  
-      
+   setInterval(function(){
+     console.log($firebase.getCurrentUser())
+   },500)
  
-    $scope.username=''
+    $scope.email=''
     $scope.password=''
-    $scope.login = function(){      
-       console.log($scope.username);
+    $scope.signIn = function(){      
+       console.log($scope.email);
        console.log($scope.password);
      }
 
-   $scope.signup = function() {
+   $scope.signUp= function() {
  
-       $firebase.signup($scope.username,$scope.password)
+       $firebase.signup($scope.email,$scope.password)
    }
+
+   $scope.sigIn = function() {
+
+   }
+   $scope.signInWithEmail= function() {
+     $firebase.signIn($scope.email,$scope.password)
+
+   }
+  $scope.resetPassword = function() {
+   $firebase.resetPassword($scope.email)
+  }
+    
+ 
+   
 }])
 
