@@ -11,18 +11,13 @@ app.service('$firebase', ['firebase',function(firebase) {
   firebase.initializeApp(config);
   
  this.signIn = function(email, password) {
-     firebase.auth().signInWithEmailAndPassword(email,password)
-      .then((result)=>{
-        console.log(result)
-        console.log(this.getCurrentUser())
-      })
+     return firebase.auth().signInWithEmailAndPassword(email,password)
+      
  }
 
  this.signUp = function( email, password) {
-   firebase.auth().createUserWithEmailAndPassword(email,password)
-    .then( (authdata) => {
-      console.log('SignUp',authdata)
-    } )
+   return firebase.auth().createUserWithEmailAndPassword(email,password)
+     
  }
 
 
@@ -30,18 +25,12 @@ app.service('$firebase', ['firebase',function(firebase) {
    // not implement
  }
  
- this.push = function() {
+ 
 
- }
-
- this.update = function() {
-
- }
+ 
  this.resetPassword= function(email) {
    const auth = firebase.auth()
-   auth.sendPasswordResetEmail(email).then(function(){
-     console.log("send Success")
-   })
+   return auth.sendPasswordResetEmail(email) 
  }
 
  this.getCurrentUser = function() {
@@ -53,26 +42,50 @@ app.service('$firebase', ['firebase',function(firebase) {
   }
  }
  this.signOut = function() {
-  firebase.auth().signOut().then(function() {
-  console.log('Signed Out')
-  }, function(error) {
-    console.error('Sign Out Error', error)
-  })
+  return firebase.auth().signOut() 
 
  }
 
- this.set = function(obj) {   
+ this.push = function(obj) {   
    obj.t=firebase.database.ServerValue.TIMESTAMP    
-   firebase.database().ref('note/'+this.getCurrentUser().uid).push(obj)
-    .then((res)=>{
-      console.log('success write')
-    })
+   return firebase.database().ref('note/'+this.getCurrentUser().uid).push(obj)
+     
  }
+
+  this.set = function(obj) {   
+   obj.t=firebase.database.ServerValue.TIMESTAMP    
+  return  firebase.database().ref('note/'+this.getCurrentUser().uid).set(obj)
+    
+ }
+
 
  this.readonce = function() {    
    return  firebase.database().ref('note/'+this.getCurrentUser().uid).once('value')  
  }
 
+this.offline = function() {
+   var myConnectionsRef = firebase.database().ref('users/joe/connections');
+
+// stores the timestamp of my last disconnect (the last time I was seen online)
+var lastOnlineRef = firebase.database().ref('users/joe/lastOnline');
+
+var connectedRef = firebase.database().ref('.info/connected');
+connectedRef.on('value', function(snap) {
+  if (snap.val() === true) {
+    // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+
+    // add this device to my connections list
+    // this value could contain info about the device or a timestamp too
+    var con = myConnectionsRef.push(true);
+
+    // when I disconnect, remove this device
+    con.onDisconnect().remove();
+
+    // when I disconnect, update the last time I was seen online
+    lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+  }
+});
+}
   
  
 }])
@@ -113,15 +126,18 @@ app.controller('submit',['$scope', '$firebase',  function($scope , $firebase ){
    
   
  
-   $firebase.readonce().then((res)=>{
-        console.log(res.val())
+   $firebase.readonce().then((res)=>{      
         $scope.$apply( function(){
           $scope.notes=res.val()
         })
    })
     //$scope.$apply()
-   
-     
+ }
+
+ $scope.offline = function() {
+   console.log('offline')
+
+   $firebase.offline();
  }
 
  $scope.setData = function(){
