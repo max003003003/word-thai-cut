@@ -14,7 +14,7 @@
   </head>
   <body ng-app="App" ng-controller="submit">
     <form  ng-submit="login()" >
-       <span> Username: </span> <input type="text" ng-model="username"><br>
+       <span> Username: </span> <input type="text" ng-model="email"><br>
        <span> Password: </span> <input type="password" ng-model="password">
        <button>Login</button> <br>      
     </form>  
@@ -24,7 +24,28 @@
    
      <button ng-click="signOut()">SignOut</button>
      <button ng-click="resetPassword()">ResetPassword</button>
+     <button ng-click="getUID()"> GetUID</button>
+  <br>
+   <form  ng-submit="setData()" >
+       <span> Note: </span> <input type="text" ng-model="note"><br>
+     
+       <button>Login</button> <br>      
+    </form>  
+      <button ng-click="pullNote()">
+            PullAllNote
+      </button>
+
+    <br>
+  
+    <div ng-repeat="v in notes" > 
+       
+        {{ v.n }} 
+        {{ v.d }}
+    </div>
+     
+
   </body>
+
 
  
 </html>

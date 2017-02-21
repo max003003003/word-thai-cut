@@ -14,6 +14,7 @@ app.service('$firebase', ['firebase',function(firebase) {
      firebase.auth().signInWithEmailAndPassword(email,password)
       .then((result)=>{
         console.log(result)
+        console.log(this.getCurrentUser())
       })
  }
 
@@ -48,7 +49,7 @@ app.service('$firebase', ['firebase',function(firebase) {
   if (user) {
     return user
   } else {
-    // No user is signed in.
+   
   }
  }
  this.signOut = function() {
@@ -60,21 +61,31 @@ app.service('$firebase', ['firebase',function(firebase) {
 
  }
 
+ this.set = function(obj) {   
+   obj.t=firebase.database.ServerValue.TIMESTAMP    
+   firebase.database().ref('note/'+this.getCurrentUser().uid).push(obj)
+    .then((res)=>{
+      console.log('success write')
+    })
+ }
+
+ this.readonce = function() {    
+   return  firebase.database().ref('note/'+this.getCurrentUser().uid).once('value')  
+ }
+
+  
  
 }])
  
  
 app.controller('submit',['$scope', '$firebase',  function($scope , $firebase ){
  
-   setInterval(function(){
-     console.log($firebase.getCurrentUser())
-   },500)
- 
+    $scope.notes=[]
+    $scope.note=''
     $scope.email=''
     $scope.password=''
-    $scope.signIn = function(){      
-       console.log($scope.email);
-       console.log($scope.password);
+    $scope.login = function(){      
+       $firebase.signIn($scope.email,$scope.password)
      }
 
    $scope.signUp= function() {
@@ -93,7 +104,37 @@ app.controller('submit',['$scope', '$firebase',  function($scope , $firebase ){
    $firebase.resetPassword($scope.email)
   }
     
+  $scope.getUID = function() {
+   
+   console.log($firebase.getCurrentUser().uid)
+ }
+
+ $scope.pullNote = function() {
+   
+  
  
+   $firebase.readonce().then((res)=>{
+        console.log(res.val())
+        $scope.$apply( function(){
+          $scope.notes=res.val()
+        })
+   })
+    //$scope.$apply()
+   
+     
+ }
+
+ $scope.setData = function(){
+   const obj = {
+      n: $scope.note,
+      d: moment.now(),
+      t: ''
+      
+   }
+   
+  console.log(obj)
+   $firebase.set(obj)
+ }
    
 }])
 
