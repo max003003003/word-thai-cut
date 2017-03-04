@@ -206,9 +206,9 @@ function thaiRegexTime( v ) {
 
 function splitWordWithPlusSign( s){
   
-    spliteDate(s)
+   
 
-    const input = s.split("+")
+    const input =  spliteDate(s)
 
 
     return  input.map( v =>  thaiRegexTime(v) )
@@ -241,23 +241,14 @@ function spliteDate(s)
       return index
       
   })
-  let ans =[] 
- 
+  let ans =[]  
   const bb = aaa.reduce((ac,va)=>{
      console.log(ac,va)
      ans.push(s.substring(ac , va))
     return  ac=va 
   })
 ans.push(s.substring(aaa[aaa.length-1]))
-
-
- console.log(ans)
-
-  
-    console.log(aaa)
-  
-  
-
+return ans;
 }
 
 console.log(splitWordWithPlusSign("วันอังคาร ไป โรบินสันนะครับ  วันพุทธ ไป พัทยา วันเสาร์"))
