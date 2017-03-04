@@ -96,10 +96,21 @@ function convertTimeToNumber( s ) {
 function convertDateToNumber( s ) {   //return {input,[]result }
    // console.log(s)
     const date = [/จันทร์/,/อังคาร/,/พุทธ/,/พฤหัส/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
+    const datespec = [/วันนี้/,/พรุ่งนี้/,/วันมะรืน/]
+   
+
+     
     const dateNumbers = /(\d\d|\d)/
     const month = [/มกรา/,/กุมภา/,/มีนา/,/เมษา/,/พฤษภา/,/มิถุนา/,/กรกฎา/,/สิงหา/,/กันยา/,/ตุลา/,/พฤศจิกา/,/ธันวา/]
     const dateEng = ['monday','tuesday','wednes','thursday','friday','saturday','sunday']
-   
+   //check วันนี้ 
+    const datespec2 = datespec.map((v)=> {
+      if(v.test(s)!=false)
+      {
+        return 
+      }
+    })
+   //
      const dateresult= date.map( (v , j)=> {
       if(v.test(s) !== false )
       {
@@ -232,24 +243,25 @@ function spliteDate(s)
 {
   let input = s
   console.log('print input',s)
-  const  dateregex = /(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi 
+  const  dateregex = /(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(นี้|แรก|พรุ่งนี้|มะรืน|)/gi
+  
+
   const sa = s.match(dateregex)
           .filter(isSpace)
+ 
   
   const aaa= sa.map((v)=>{
      const index = s.indexOf(v)
-      return index
-      
-  })
+     return index })
+
   let ans =[]  
-  const bb = aaa.reduce((ac,va)=>{
-     console.log(ac,va)
+  const bb = aaa.reduce((ac,va)=>{     
      ans.push(s.substring(ac , va))
-    return  ac=va 
-  })
-ans.push(s.substring(aaa[aaa.length-1]))
-return ans;
+     return  ac=va })
+
+  ans.push(s.substring(aaa[aaa.length-1]))
+  return ans;
 }
 
-console.log(splitWordWithPlusSign("วันอังคาร ไป โรบินสันนะครับ  วันพุทธ ไป พัทยา วันเสาร์"))
+console.log(splitWordWithPlusSign("วันอังคาร ไป 10 โมง  โรบินสันนะครับ  วันพุธ ไป พัทยา วันเสาร์   วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ วันพรุ่งนี้ พรุ่งนี้ วันมะรืน "))
  
