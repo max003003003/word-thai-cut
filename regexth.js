@@ -96,7 +96,7 @@ function convertTimeToNumber( s ) {
 function convertDateToNumber( s ) {   //return {input,[]result }
    // console.log(s)
     const date = [/จันทร์/,/อังคาร/,/พุทธ/,/พฤหัส/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
-    const datespec = [/วันนี้/,/พรุ่งนี้/,/วันมะรืน/]
+    const datespec = [/วันนี้/,/พรุ่งนี้/,/มะรืน/]
    
 
      
@@ -104,12 +104,13 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     const month = [/มกรา/,/กุมภา/,/มีนา/,/เมษา/,/พฤษภา/,/มิถุนา/,/กรกฎา/,/สิงหา/,/กันยา/,/ตุลา/,/พฤศจิกา/,/ธันวา/]
     const dateEng = ['monday','tuesday','wednes','thursday','friday','saturday','sunday']
    //check วันนี้ 
-    const datespec2 = datespec.map((v)=> {
+    const datespec2 = datespec.map((v , j)=> {
+   
       if(v.test(s)!=false)
       {
-        return 
+        return j
       }
-    })
+    }).filter(cutNull)
    //
      const dateresult= date.map( (v , j)=> {
       if(v.test(s) !== false )
@@ -129,7 +130,11 @@ function convertDateToNumber( s ) {   //return {input,[]result }
       if(cv !== null) 
       return  cv[0]      
      else return '' } ).filter(isSpace)     
-   const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0]  }
+    
+   
+
+    
+   const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0] ,'option': datespec2[0]  }
   // console.log(result)
   const timeObj=  { 'time': result  , 'strDate': s }
   return timeObj 
@@ -181,7 +186,14 @@ function convertTime( s ) {
           return dateR
           //console.log('datenumber date month',dateR)
     } else if(  isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) { //ไม่ระบุ วันที่  
-        const dateR = moment().hour(parseInt(h)).minute(parseInt(m))       
+           let DateR
+           if(date.option!=undefined){
+               dateR = moment().day(date.option-1).hour(parseInt(h)).minute(parseInt(m))      
+           }
+           else {
+            dateR = moment().hour(parseInt(h)).minute(parseInt(m))   
+           }                  
+               
         return dateR
       }
 }
@@ -222,7 +234,7 @@ function splitWordWithPlusSign( s){
     const input =  spliteDate(s)
 
 
-    return  input.map( v =>  thaiRegexTime(v) )
+    // return  input.map( v =>  thaiRegexTime(v) )
     
 }
 
@@ -243,25 +255,143 @@ function spliteDate(s)
 {
   let input = s
   console.log('print input',s)
-  const  dateregex = /(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(นี้|แรก|พรุ่งนี้|มะรืน|)/gi
-  
 
-  const sa = s.match(dateregex)
-          .filter(isSpace)
  
   
-  const aaa= sa.map((v)=>{
-     const index = s.indexOf(v)
+  const dateregex3 = /(วันนี้|พรุ่งนี้|มะรืน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)/gi
+  const dateregex4 = /(วันนี้|วันพรุ่งนี้|วันมะรืน|)(   |  | |)(วันจันทร์|วันอังคาร|วันพุธ|วันพฤหัส|วันศุกร์|วันเสาร์|วันอาทิตย์|)/gi
+  const regexes = [dateregex3,dateregex4]
+   
+   var valueA=[],valueB =[] 
+   var tempA=["วันนี้","พรุ่งนี้","มะรืน","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์","อาทิตย์"]
+   tempA.sort()
+   for(let i =0;i<tempA.length;i++)
+   {
+     valueA[tempA[i]] = i+1
+   }
+ valueB["วันจันทร์"]= 1
+valueB["วันพรุ่งนี้"]=2
+valueB["วันพฤหัส"]=3
+valueB["วันพุธ"]=4
+valueB["วันมะรืน"]=5
+valueB["วันนี้"]=6
+valueB["วันศุกร์"]=7
+valueB["วันอังคาร"]=8
+valueB["วันอาทิตย์"]=9
+valueB["วันเสาร์"]=10 
+  
+  
+ 
+
+ const output = regexes.map((v)=>{
+     const sa = s.match(v)
+          .filter(isSpace)
+
+   const removespace=sa.map((v)=> v.trim())
+ 
+   var removeDub=removespace.filter( function(item,pos,self){
+            return self.indexOf(item) == pos
+          })
+ 
+  //console.log(removeDub)
+ 
+  const temp= removeDub.map((v)=>{
+     console.log(v)
+     //const index = s.indexOf(v)
+      index = [] 
+       let i =0
+       let output =0    
+      while(true)
+      {                    
+          i=s.indexOf(v,i)  
+          if(i==-1)break
+          index.push(i)
+          ++i      
+        }      
+      console.log(index)
+      
      return index })
 
-  let ans =[]  
-  const bb = aaa.reduce((ac,va)=>{     
-     ans.push(s.substring(ac , va))
-     return  ac=va })
+    
+    return { 'data': removeDub ,  'output': temp }
+ })
+ console.log(output)
 
-  ans.push(s.substring(aaa[aaa.length-1]))
-  return ans;
+const a = output[0]
+const b = output[1]
+console.log( a)
+console.log( b)
+
+let i =0 ,j=0;
+
+let anss=[]
+while(i<a.data.length && j<b.data.length)
+{
+  if( valueA[a.data[i]] === valueB[b.data[j]] )
+  {
+     
+    i++
+    j++
+  }else if(valueA[a.data[i]] < valueB[b.data[j]] ) //A<
+  {
+   i++
+  } 
+  else{  //B<
+    j++
+  }
+
+}
+ 
+console.log(a)
+
+
+
+
+
+//   const sa = s.match(dateregex)
+//           .filter(isSpace)
+//   const removespace=sa.map((v)=> v.trim())
+ 
+//   const removeDub=removespace.filter( function(item,pos,self){
+//             return self.indexOf(item) == pos
+//           })
+ 
+//  console.log(removeDub)
+ 
+//   const temp= removeDub.map((v)=>{
+//      console.log(v)
+//      //const index = s.indexOf(v)
+//       index = [] 
+//        let i =0
+//        let output =0    
+//       while(true)
+//       {                    
+//           i=s.indexOf(v,i)  
+//           if(i==-1)break
+//           index.push(i)
+//           ++i      
+//         }      
+//       console.log(index)      
+//      return index })
+  //  const aaa = temp.flatMap((v)=>v)
+  //   aaa.sort((a,b)=> a - b)
+  //   console.log(aaa)
+
+  // let ans =[]  
+  // const bb = aaa.reduce((ac,va)=>{  
+  //    console.log(ac , va)
+  //    console.log(s.substring(ac , va))
+  //    ans.push(s.substring(ac , va))
+  //    return  ac=va })
+     
+
+  // ans.push(s.substring(aaa[aaa.length-1]))
+  // console.log(ans)
+  // return ans;
 }
 
-console.log(splitWordWithPlusSign("วันอังคาร ไป 10 โมง  โรบินสันนะครับ  วันพุธ ไป พัทยา วันเสาร์   วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ วันพรุ่งนี้ พรุ่งนี้ วันมะรืน "))
+
+ 
+
+console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
  
