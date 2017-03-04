@@ -1,4 +1,16 @@
 const app = angular.module('App',['firebase'])
+let simple 
+
+let db =new PouchDB('fibaseTest')
+
+  db.info().then((info) =>{
+    console.log(info);
+  })
+
+
+db.get('mittens').then(function (doc) {
+ simple = doc
+});
 
 app.service('$firebase', ['firebase',function(firebase) {
   const config = {
@@ -9,6 +21,8 @@ app.service('$firebase', ['firebase',function(firebase) {
     messagingSenderId: "899590444510"
   };
   firebase.initializeApp(config);
+  
+ 
   
  this.signIn = function(email, password) {
      return firebase.auth().signInWithEmailAndPassword(email,password)
@@ -42,7 +56,7 @@ app.service('$firebase', ['firebase',function(firebase) {
   }
  }
  this.signOut = function() {
-  return firebase.auth().signOut() 
+ return firebase.auth().signOut() 
 
  }
 
@@ -58,7 +72,7 @@ app.service('$firebase', ['firebase',function(firebase) {
     
  }
 
-
+  
  this.readonce = function() {    
    return  firebase.database().ref('note/'+this.getCurrentUser().uid).once('value')  
  }
@@ -83,6 +97,7 @@ connectedRef.on('value', function(snap) {
 
     // when I disconnect, update the last time I was seen online
     lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+    lastOnlineRef.onDisconnect().set({"n":'somethidng'});
   }
 });
 }
@@ -123,15 +138,14 @@ app.controller('submit',['$scope', '$firebase',  function($scope , $firebase ){
  }
 
  $scope.pullNote = function() {
-   
-  
- 
    $firebase.readonce().then((res)=>{      
         $scope.$apply( function(){
           $scope.notes=res.val()
+          console.log(res.val())
+          
         })
    })
-    //$scope.$apply()
+ 
  }
 
  $scope.offline = function() {
@@ -140,17 +154,71 @@ app.controller('submit',['$scope', '$firebase',  function($scope , $firebase ){
    $firebase.offline();
  }
 
- $scope.setData = function(){
-   const obj = {
-      n: $scope.note,
-      d: moment.now(),
-      t: ''
-      
-   }
+//  $scope.setData = function(){
+    
+//    firebase.database().ref('pouch/'+$firebase.getCurrentUser().uid).set(simple).then((re)=>{
+//      console.log(re)
+//    })
+//    }
+
+$scope.mockingdata = function() {
+  console.log("Mocking")
+  //  for(let i = 0;i<10;i++)
+  //  {
+  //    db.put({_id:i.toString() ,"v":i})
+  //  }
+
+  //  for(let i =0;i<10;i++)
+  //  {
+  //    db.get(i.toString()).then((res)=>{
+  //      console.log(res)
+  //    })
+  //  }
+   firebase.database().ref('note/'+$firebase.getCurrentUser().uid).once('value').then((res)=>{
+       var changes = db.changes({
+  since: 'now',
+  live: true,
+  include_docs: true
+}).on('change', function(change) {
+  // handle change
+}).on('complete', function(info) {
+  // changes() was canceled
+}).on('error', function (err) {
+  console.log(err);
+});
+
+            
+        // console.log(res.val())
+        // const obj ={ "_id":$firebase.getCurrentUser().uid+"125" ,"v":res.val() }
+        
+        //   db.put(obj).then((res)=>{
+        //      console.log('finished')
+        //    })
+     
+          
+ })  
+
+ 
+
+}
+$scope.setData = function() {
    
-  console.log(obj)
-   $firebase.set(obj)
- }
+  
+   firebase.database().ref('pouch/'+$firebase.getCurrentUser().uid).once('value').then((res)=>{
+     console.log(res.val())
+     //db.put(res.val())
+     db.get('mittens').then((info) =>{
+   console.log(info);
+ })
+
+   })
+ 
+
+   
+}
+   
+ 
    
 }])
 
+console.log(moment.TIMESTAMP)

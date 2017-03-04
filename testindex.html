@@ -9,6 +9,7 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/firebase/firebase.js"></script>
   <script src="bower_components/angularfire/dist/angularfire.js"></script>
+ <script src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
   <script src="regexth.js"  ></script>
   <script src="serviceTest.js"></script>
   </head>
@@ -38,12 +39,14 @@
       <button ng-click="offline()">Offline</button>
 
     <br>
-  
+      {{ v}}
     <div ng-repeat="v in notes" > 
-       
+        {{ v.key }}
         {{ v.n }} 
         {{ v.d }}
     </div>
+
+     <button ng-click="mockingdata()">Mocking</button>
      
 
   </body>
