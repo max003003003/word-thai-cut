@@ -111,6 +111,7 @@ function convertDateToNumber( s ) {   //return {input,[]result }
         return j
       }
     }).filter(cutNull)
+   // console.log(s, datespec2 )
    //
      const dateresult= date.map( (v , j)=> {
       if(v.test(s) !== false )
@@ -188,7 +189,7 @@ function convertTime( s ) {
     } else if(  isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) { //ไม่ระบุ วันที่  
            let DateR
            if(date.option!=undefined){
-               dateR = moment().day(date.option-1).hour(parseInt(h)).minute(parseInt(m))      
+               dateR = moment().day(date.option).hour(parseInt(h)).minute(parseInt(m))      
            }
            else {
             dateR = moment().hour(parseInt(h)).minute(parseInt(m))   
@@ -234,7 +235,7 @@ function splitWordWithPlusSign( s){
     const input =  spliteDate(s)
 
 
-    // return  input.map( v =>  thaiRegexTime(v) )
+    return  input.map( v =>  thaiRegexTime(v) )
     
 }
 
@@ -263,26 +264,23 @@ function spliteDate(s)
   const regexes = [dateregex3,dateregex4]
    
    var valueA=[],valueB =[] 
-   var tempA=["วันนี้","พรุ่งนี้","มะรืน","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์","อาทิตย์"]
+   var tempA=["จันทร์","พรุ่งนี้","พฤหัส","พุธ","มะรืน","วันนี้","ศุกร์","อังคาร","อาทิตย์","เสาร์"]
    tempA.sort()
    for(let i =0;i<tempA.length;i++)
    {
      valueA[tempA[i]] = i+1
    }
- valueB["วันจันทร์"]= 1
-valueB["วันพรุ่งนี้"]=2
-valueB["วันพฤหัส"]=3
-valueB["วันพุธ"]=4
-valueB["วันมะรืน"]=5
-valueB["วันนี้"]=6
-valueB["วันศุกร์"]=7
-valueB["วันอังคาร"]=8
-valueB["วันอาทิตย์"]=9
-valueB["วันเสาร์"]=10 
   
-  
- 
-
+  valueB["วันจันทร์"]= 1
+  valueB["วันพรุ่งนี้"]=2
+  valueB["วันพฤหัส"]=3
+  valueB["วันพุธ"]=4
+  valueB["วันมะรืน"]=5
+  valueB["วันนี้"]=6
+  valueB["วันศุกร์"]=7
+  valueB["วันอังคาร"]=8
+  valueB["วันอาทิตย์"]=9
+  valueB["วันเสาร์"]=10 
  const output = regexes.map((v)=>{
      const sa = s.match(v)
           .filter(isSpace)
@@ -292,8 +290,9 @@ valueB["วันเสาร์"]=10
    var removeDub=removespace.filter( function(item,pos,self){
             return self.indexOf(item) == pos
           })
- 
-  //console.log(removeDub)
+
+  var removeDub = removeDub.sort()
+    console.log(removeDub)
  
   const temp= removeDub.map((v)=>{
      console.log(v)
@@ -320,33 +319,72 @@ valueB["วันเสาร์"]=10
 const a = output[0]
 const b = output[1]
 console.log( a)
+ 
 console.log( b)
 
 let i =0 ,j=0;
 
 let anss=[]
-while(i<a.data.length && j<b.data.length)
+let ansNum=[]
+while(i<a.data.length || j<b.data.length)
 {
+   if(i===a.data.length)
+   {
+     i=a.data.length
+   }
+   if(b===b.data.length)
+   {
+     j=b.data.length
+   }
+
+  console.log(a.data[i],valueA[a.data[i]] ,"----",b.data[j],valueB[b.data[j]] )   
+ // console.log(i,"==",j,"==", valueB[b.data[j]])
   if( valueA[a.data[i]] === valueB[b.data[j]] )
   {
+    
+     anss.push(b.data[j])
+        console.log(a.output[i] ,"--",b.output[j])
+    let h=0,k=0
+    let ss=[]
+    var d = a.output[i].concat(b.output[j])
+    var e = d.filter(function (item, pos) {return d.indexOf(item) == pos});
+    e=e.sort((a,b)=>( a-b))
+    let at=e
+    e.forEach((v)=>{
      
+      if(at.indexOf((v+3))!== -1)
+        {e.splice(at.indexOf((v+3)),1)}
+    })
+
+ 
+    ansNum.push(e)
+
+
     i++
     j++
+
   }else if(valueA[a.data[i]] < valueB[b.data[j]] ) //A<
   {
-   i++
+     anss.push(a.data[i])
+     ansNum.push(a.output[i])
+  
+     i++
   } 
   else{  //B<
+     anss.push(b.data[j])
+     ansNum.push(b.output[j])
     j++
   }
 
 }
+console.log(anss)
+console.log(ansNum)
  
 console.log(a)
 
-
-
-
+let ansNum2 = ansNum.flatMap((v)=> v)
+ansNum2 = ansNum2.sort((a,b)=> a - b)
+console.log(ansNum2)
 
 //   const sa = s.match(dateregex)
 //           .filter(isSpace)
@@ -376,22 +414,23 @@ console.log(a)
   //  const aaa = temp.flatMap((v)=>v)
   //   aaa.sort((a,b)=> a - b)
   //   console.log(aaa)
+  let aaa = ansNum2
 
-  // let ans =[]  
-  // const bb = aaa.reduce((ac,va)=>{  
-  //    console.log(ac , va)
-  //    console.log(s.substring(ac , va))
-  //    ans.push(s.substring(ac , va))
-  //    return  ac=va })
+  let ans =[]  
+  const bb = aaa.reduce((ac,va)=>{  
+     console.log(ac , va)
+     console.log(s.substring(ac , va))
+     ans.push(s.substring(ac , va))
+     return  ac=va })
      
 
-  // ans.push(s.substring(aaa[aaa.length-1]))
-  // console.log(ans)
-  // return ans;
+  ans.push(s.substring(aaa[aaa.length-1]))
+  let ans2=ans.filter( (v) =>{
+    return v!="วัน"
+  })
+
+  console.log(ans2)
+  return ans2;
 }
-
-
- 
-
 console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
  
