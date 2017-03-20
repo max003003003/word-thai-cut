@@ -57,7 +57,7 @@ function createTimeWithCheck( timeR, hr ){
     } 
 } 
 function convertTimeToNumber( s ) {
-     const timeNumber =   /(\d\d|\d)/gi
+     const timeNumber =   /(\d\d|\d)/gi     
      const mong = /โมง/
      const bai = /บ่าย/
      const tee = /ตี/
@@ -233,7 +233,7 @@ function splitWordWithPlusSign( s){
    
 
     const input =  spliteDate(s)
-
+    if(input === undefined) return
 
     return  input.map( v =>  thaiRegexTime(v) )
     
@@ -256,9 +256,6 @@ function spliteDate(s)
 {
   let input = s
   console.log('print input',s)
-
- 
-  
   const dateregex3 = /(วันนี้|พรุ่งนี้|มะรืน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)/gi
   const dateregex4 = /(วันนี้|วันพรุ่งนี้|วันมะรืน|)(   |  | |)(วันจันทร์|วันอังคาร|วันพุธ|วันพฤหัส|วันศุกร์|วันเสาร์|วันอาทิตย์|)/gi
   const regexes = [dateregex3,dateregex4]
@@ -269,8 +266,7 @@ function spliteDate(s)
    for(let i =0;i<tempA.length;i++)
    {
      valueA[tempA[i]] = i+1
-   }
-  
+   }  
   valueB["วันจันทร์"]= 1
   valueB["วันพรุ่งนี้"]=2
   valueB["วันพฤหัส"]=3
@@ -293,6 +289,7 @@ function spliteDate(s)
 
   var removeDub = removeDub.sort()
     console.log(removeDub)
+  if(removeDub.length===0){return}
  
   const temp= removeDub.map((v)=>{
      console.log(v)
@@ -314,18 +311,17 @@ function spliteDate(s)
     
     return { 'data': removeDub ,  'output': temp }
  })
- console.log(output)
-
+console.log(output)
 const a = output[0]
 const b = output[1]
-console.log( a)
+if(a === undefined || b === undefined) return
  
+console.log( a) 
 console.log( b)
-
 let i =0 ,j=0;
-
 let anss=[]
 let ansNum=[]
+
 while(i<a.data.length || j<b.data.length)
 {
    if(i===a.data.length)
@@ -337,12 +333,12 @@ while(i<a.data.length || j<b.data.length)
      j=b.data.length
    }
 
-  console.log(a.data[i],valueA[a.data[i]] ,"----",b.data[j],valueB[b.data[j]] )   
+ // console.log(a.data[i],valueA[a.data[i]] ,"----",b.data[j],valueB[b.data[j]] )   
  // console.log(i,"==",j,"==", valueB[b.data[j]])
   if( valueA[a.data[i]] === valueB[b.data[j]] )
   {
     
-     anss.push(b.data[j])
+    anss.push(b.data[j])
         console.log(a.output[i] ,"--",b.output[j])
     let h=0,k=0
     let ss=[]
@@ -350,38 +346,28 @@ while(i<a.data.length || j<b.data.length)
     var e = d.filter(function (item, pos) {return d.indexOf(item) == pos});
     e=e.sort((a,b)=>( a-b))
     let at=e
-    e.forEach((v)=>{
-     
+    e.forEach((v)=>{     
       if(at.indexOf((v+3))!== -1)
         {e.splice(at.indexOf((v+3)),1)}
-    })
-
- 
+    }) 
     ansNum.push(e)
-
-
     i++
     j++
-
   }else if(valueA[a.data[i]] < valueB[b.data[j]] ) //A<
   {
      anss.push(a.data[i])
-     ansNum.push(a.output[i])
-  
+     ansNum.push(a.output[i])  
      i++
   } 
   else{  //B<
      anss.push(b.data[j])
      ansNum.push(b.output[j])
-    j++
+     j++
   }
-
 }
 console.log(anss)
-console.log(ansNum)
- 
+console.log(ansNum) 
 console.log(a)
-
 let ansNum2 = ansNum.flatMap((v)=> v)
 ansNum2 = ansNum2.sort((a,b)=> a - b)
 console.log(ansNum2)
@@ -415,22 +401,20 @@ console.log(ansNum2)
   //   aaa.sort((a,b)=> a - b)
   //   console.log(aaa)
   let aaa = ansNum2
-
   let ans =[]  
   const bb = aaa.reduce((ac,va)=>{  
-     console.log(ac , va)
-     console.log(s.substring(ac , va))
+     //console.log(ac , va)
+    // console.log(s.substring(ac , va))
      ans.push(s.substring(ac , va))
-     return  ac=va })
-     
+     return  ac=va })   
 
   ans.push(s.substring(aaa[aaa.length-1]))
-  let ans2=ans.filter( (v) =>{
-    return v!="วัน"
-  })
-
+  let ans2=ans.filter((v) =>{
+    return v!="วัน" })
   console.log(ans2)
   return ans2;
 }
-console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
+console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ 10 โมง 9 โมง 11:00  วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
+
+console.log(splitWordWithPlusSign(" ไปโรบินสัน"))
  
