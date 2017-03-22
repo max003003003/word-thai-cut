@@ -233,7 +233,13 @@ function splitWordWithPlusSign( s){
    
 
     const input =  spliteDate(s)
-    if(input === undefined) return
+     
+    if(input === undefined) {
+        const ans = thaiRegexTime(s)
+        if(ans === undefined) return
+        else return ans
+       
+    }
 
     return  input.map( v =>  thaiRegexTime(v) )
     
@@ -416,5 +422,7 @@ console.log(ansNum2)
 }
 console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ 10 โมง 9 โมง 11:00  วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
 
-console.log(splitWordWithPlusSign(" ไปโรบินสัน"))
+console.log(splitWordWithPlusSign(" ไปโรบินสัน 19.00 19:00"))
+console.log(splitWordWithPlusSign(" ไปโรบินสัน  "))
+ 
  
