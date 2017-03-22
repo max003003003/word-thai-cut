@@ -5,9 +5,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
+  <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/firebase/firebase.js"></script>
+  <script src="bower_components/angularfire/dist/angularfire.js"></script>
+ <script src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
   <script src="regexth.js"  ></script>
+  <script src="serviceTest.js"></script>
   </head>
-  <body>
-  
+  <body ng-app="App" ng-controller="submit">
+    <form  ng-submit="login()" >
+       <span> Username: </span> <input type="text" ng-model="email"><br>
+       <span> Password: </span> <input type="password" ng-model="password">
+       <button>Login</button> <br>      
+    </form>  
+     <button ng-click="signUp()"> SignUP</button> <br>
+     <button ng-click="sigIn()">Signin</button> <br>
+     <button ng-click="signInWithEmail()">SigninWithEmail</button>
+   
+     <button ng-click="signOut()">SignOut</button>
+     <button ng-click="resetPassword()">ResetPassword</button>
+     <button ng-click="getUID()"> GetUID</button>
+  <br>
+   <form  ng-submit="setData()" >
+       <span> Note: </span> <input type="text" ng-model="note"><br>
+     
+       <button>Login</button> <br>      
+    </form>  
+      <button ng-click="pullNote()">
+            PullAllNote
+      </button>
+
+      <button ng-click="offline()">Offline</button>
+
+    <br>
+      {{ v}}
+    <div ng-repeat="v in notes" > 
+        {{ v.key }}
+        {{ v.n }} 
+        {{ v.d }}
+    </div>
+
+     <button ng-click="mockingdata()">Mocking</button>
+     
+
   </body>
+
+
+ 
 </html>
