@@ -238,7 +238,7 @@ function thaiRegexTime( v ) {
           //console.log("-----------------------------------------")
           //console.log('input ',v)         
           const a = mergeAndCreateDateAndTime(resultTime,resultDate)
-         // console.log('output',a)
+          // console.log('output',a)
           //console.log("-----------------------------------------")
 
           const result =  {'input': v , 'output': a ,'resultdate':resultDate.strDate,'resultTime':resultTime.input }
@@ -418,4 +418,5 @@ console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
  
 console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
 console.log(splitWordWithPlusSign("วันนี้"))
+
 
