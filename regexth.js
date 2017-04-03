@@ -54,7 +54,7 @@ function dateRegex (s) {
     return resulRegex[size.indexOf(Math.min(...size))].map((c) => c.trim()).filter(cutNumber) 
 }
 function createTimeWithCheck( timeR, hr   ){
-  
+   
     if(timeR.length==2){
               return { 'H':(parseInt( timeR[0])+hr).toString() , 'm':timeR[1] }
     }else {
@@ -104,7 +104,7 @@ function convertTimeToNumber( s ) {
      }      
   })   
    const result = {'input': s, 'result': ac}
-  // console.log('ttt',result)
+  //console.log('ttt',result)
   return result
 }
 
@@ -120,14 +120,14 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     const dateEng = ['monday','tuesday','wednes','thursday','friday','saturday','sunday']
    //check วันนี้ 
     const datespec2 = datespec.map((v , j)=> {
-   
+     
       if(v.test(s)!=false)
       {
         return j
       }
     }).filter(cutNull)
-   // console.log(s, datespec2 )
-   //
+   //console.log(s, datespec2 )
+   
      const dateresult= date.map( (v , j)=> {
       if(v.test(s) !== false )
       {
@@ -150,8 +150,8 @@ function convertDateToNumber( s ) {   //return {input,[]result }
    
 
     
-   const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0] ,'option': datespec2[0]  }
-  // console.log(result)
+  const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0] ,'option': datespec2[0]  }
+  console.log(result)
   const timeObj=  { 'time': result  , 'strDate': s }
   return timeObj 
 }
@@ -175,13 +175,15 @@ function convertTime( s ) {
   
  function createTimeObject(date,h,m)
  {      
+     
         // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
       if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {          
           const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
           return dateR
           //console.log('Match Date number ',dateR)
       } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้        
-              if( moment().isoWeekday() >= date.date ) {        
+              if( moment().isoWeekday() >= date.date  ) {    
+
                   const dateR = moment().add(1,'week').isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
                   return dateR
               } else  {
@@ -223,7 +225,8 @@ function mergeAndCreateDateAndTime ( time, date)
      } else {        
        if( date.strDate.length!=0)
           return  date.strDate.map((v) => {
-              return createTimeObject(date.time,7,0)
+
+              return createTimeObject(date.time,moment().hour(),moment().minute())
            })
        
      }
@@ -310,8 +313,7 @@ function spliteDate(s)
 
   var removeDub = removeDub.sort()
     console.log(removeDub)
-  if(removeDub.length===0){return}
- 
+  if(removeDub.length===0){return} 
   const temp= removeDub.map((v)=>{
      console.log(v)
      //const index = s.indexOf(v)
@@ -415,3 +417,5 @@ console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกิ�
 console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
  
 console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
+console.log(splitWordWithPlusSign("วันนี้"))
+
