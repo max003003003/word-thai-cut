@@ -18,6 +18,7 @@ describe('xx โมง xx นาที test',function(){
       expect("2017-04-02 10:45").toEqual(result2[0].output[1].format("YYYY-MM-DD HH:mm"))
       expect("2017-04-03 08:00").toEqual(result2[1].output[0].format("YYYY-MM-DD HH:mm"))
       expect("2017-04-03 18:00").toEqual(result2[1].output[1].format("YYYY-MM-DD HH:mm"))
+ 
 
   })
 })
