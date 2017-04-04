@@ -37,19 +37,20 @@ function timeRegex(s) {
  
 //for extract date from sentense parameter is array of sentense 
 function dateRegex (s) { 
-     var a = s.replace(/(\d\d|\d)(   |  | |)(โมง)(   |  | |)(\d\d|\d|)(   |  | |)(นาที|)/gi,'');
+     var b = s.replace(/(\d\d|\d)(   |  | |)(โมง)(   |  | |)(\d\d|\d|)(   |  | |)(นาที|)/gi,'');
+     var a = b.replace(/(1?[0-9]|2[0-3])(:|.)[0-5][0-9]/gi,'');
      console.log(a)
 
      const answer = {}
-     const regexPattern = [ /(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi     
-     ,/(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|กุมภาพันธ์|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
-     ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi
-     ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
-     ,/(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi 
-     ,/(วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi 
+     const regexPattern = [ /(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi     
+     ,/(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|กุมภาพันธ์|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
+     ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi
+     ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
+     ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi 
+     ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi 
      ,]      
     const resulRegex = regexPattern.map((v)=> a.match(v).filter(isSpace))      
-    //console.log(resulRegex)
+    console.log(resulRegex)
     const size = resulRegex.map((v)=> v.length )   
     return resulRegex[size.indexOf(Math.min(...size))].map((c) => c.trim()).filter(cutNumber) 
 }
@@ -99,7 +100,7 @@ function convertTimeToNumber( s ) {
                     }
              }             
     }else{
-      
+        
        return createTimeWithCheck(timeR,0)    
      }      
   })   
@@ -109,8 +110,8 @@ function convertTimeToNumber( s ) {
 }
 
 function convertDateToNumber( s ) {   //return {input,[]result }
-  //console.log(s)
-    const date = [/จันทร์/,/อังคาร/,/พุ(ท|)ธ/,/(พฤหัส|พฤ)/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
+    //console.log(s)
+    const date = [/(จ.|จัน|จันทร์)/,/(อังคาร|อ.)/,/(พ.|(พุ(ท|)ธ))/,/(พฤหัส|พฤ)/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
     const datespec = [/วันนี้/,/พรุ่งนี้/,/มะรืน/]
    
 
@@ -177,13 +178,13 @@ function convertTime( s ) {
  {      
      
         // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
-      if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {          
+      if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {         
+
           const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
           return dateR
           //console.log('Match Date number ',dateR)
       } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้        
-              if( moment().isoWeekday() >= date.date  ) {    
-
+              if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) <= moment().isoWeekday(date.date)  ) {    
                   const dateR = moment().add(1,'week').isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
                   return dateR
               } else  {
@@ -206,9 +207,21 @@ function convertTime( s ) {
     } else if(  isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) { //ไม่ระบุ วันที่  
            let DateR
            if(date.option!=undefined){
-               dateR = moment().day(date.option).hour(parseInt(h)).minute(parseInt(m))      
+               console.log('match case today')
+               switch(date.option)
+               {
+                 case 0: dateR = moment().hour(parseInt(h)).minute(parseInt(m))  
+                        break
+                 case 1: dateR = moment().add(1,'day').hour(parseInt(h)).minute(parseInt(m))  
+                        break 
+                 case 2: dateR = moment().add(2,'day').hour(parseInt(h)).minute(parseInt(m))  
+                        break        
+
+               }
+              
            }
            else {
+           
             dateR = moment().hour(parseInt(h)).minute(parseInt(m))   
            }                  
                
@@ -224,9 +237,16 @@ function mergeAndCreateDateAndTime ( time, date)
         })
      } else {        
        if( date.strDate.length!=0)
+       console.log(date)
           return  date.strDate.map((v) => {
-
-              return createTimeObject(date.time,moment().hour(),moment().minute())
+              if( v ==='วันนี้'){
+                
+                 return createTimeObject(date.time,moment().hour(),moment().minute())
+              }
+              else 
+              {
+                 return createTimeObject(date.time,7,0)
+              }
            })
        
      }
@@ -245,15 +265,27 @@ function thaiRegexTime( v ) {
           //console.log(result) 
          return   result
 }
+function corectSentece(s)
+{
+   console.log(s)
+    if( (/(จ\.|จัน)/).test(s))
+     {
+          s= s.replace(/(จ\.)/,'จันทร์ 7:00')
+          console.log(s)
+     }
+ 
+  return s
+}
 
 function splitWordWithPlusSign( s){
   
    
-
+   // s= corectSentece(s)
     const input =  spliteDate(s)
-     
+    console.log(input)
     if(input === undefined) {
         const ans = thaiRegexTime(s)
+        console.log(ans)
         if(ans === undefined) return
         else return ans
        
@@ -275,9 +307,15 @@ testSet1.forEach( (v) => {
       })   
     }
 }) 
-
-function spliteDate(s)
+//cutstring with date keyword
+function spliteDate(s) 
 {
+   
+  
+   
+  
+  
+
   let input = s
   console.log('print input',s)
   const dateregex3 = /(วันนี้|พรุ่งนี้|มะรืน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)/gi
@@ -408,15 +446,24 @@ console.log(ansNum2)
   console.log(ans2)
   return ans2;
 }
-console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ 10 โมง 9 โมง 11:00  วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
-
-console.log(splitWordWithPlusSign(" ไปโรบินสัน 19.00 19:00"))
-console.log(splitWordWithPlusSign(" ไปโรบินสัน  "))
-
-console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
-console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
- 
-console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
-console.log(splitWordWithPlusSign("วันนี้"))
-
-
+// console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ 10 โมง 9 โมง 11:00  วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
+// console.log(splitWordWithPlusSign(" ไปโรบินสัน 19.00 19:00"))
+// console.log(splitWordWithPlusSign(" ไปโรบินสัน  "))
+// console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
+// console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
+// console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
+// console.log(splitWordWithPlusSign("วันนี้"))
+// console.log(splitWordWithPlusSign("วันนี้ 9 โมง 50 นาที "))
+// console.log(splitWordWithPlusSign("มะรืน "))
+// console.log(splitWordWithPlusSign("มะรืน 14.25"))
+// console.log(splitWordWithPlusSign("พรุ่งนี้"))
+// console.log(splitWordWithPlusSign("พรุ่งนี้  13.22"))
+// console.log(splitWordWithPlusSign("จันทร์ ไปโรบินสัน จัน ")) 
+// console.log(splitWordWithPlusSign("จ.  "))
+// console.log(splitWordWithPlusSign("อังคาร"))
+// console.log(splitWordWithPlusSign("อ"))
+// console.log(splitWordWithPlusSign("พุทธ"))
+// console.log(splitWordWithPlusSign("พุท"))
+// console.log(splitWordWithPlusSign("พุทธ"))
+  console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
+   console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
