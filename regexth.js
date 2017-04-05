@@ -9,8 +9,8 @@ const regexDay3 = /(วัน|วันที่|)(   |  | |)(จันทร์
 Array.prototype.flatMap = function(lambda) { 
     return Array.prototype.concat.apply([], this.map(lambda)); 
 }
-var text3 = [ '31 เมษายน','10 ไป10','7 โมงเช้า 6โมงเจอกัน ','10.00 บ่าย 3 บ่าย 4 โมง 3 ทุ่ม 9.56 น. ตี 2  6 โมงเย็น ','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา',
-'มีนา 29 ไป สอบ 9 โมง ','วัน จันทร์ 10 โมง ไปโรบินสัน ไปตลาด วันอังคาร ไป 9โมง วันเสาร์','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
+// var text3 = [ '31 เมษายน','10 ไป10','7 โมงเช้า 6โมงเจอกัน ','10.00 บ่าย 3 บ่าย 4 โมง 3 ทุ่ม 9.56 น. ตี 2  6 โมงเย็น ','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา',
+// 'มีนา 29 ไป สอบ 9 โมง ','วัน จันทร์ 10 โมง ไปโรบินสัน ไปตลาด วันอังคาร ไป 9โมง วันเสาร์','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
 const cutNull = function (s){  
   return s!==null && s!==undefined 
 }
@@ -31,7 +31,7 @@ function timeRegex(s) {
      const regexTime4 = [ regexTime, regexTime2, regexTime3 ]
      const resultTimeRegex = regexTime4.map((v)=> s.match(v)).filter(cutNull).flatMap( (v) => v )  
 
-     //console.log('resulttime',resultTimeRegex)   
+   // console.log('resulttime',resultTimeRegex)   
      return  resultTimeRegex
 }
  
@@ -105,13 +105,13 @@ function convertTimeToNumber( s ) {
      }      
   })   
    const result = {'input': s, 'result': ac}
-  //console.log('ttt',result)
+ console.log('ttt',result)
   return result
 }
 
 function convertDateToNumber( s ) {   //return {input,[]result }
     //console.log(s)
-    const date = [/(จ.|จัน|จันทร์)/,/(อังคาร|อ.)/,/(พ.|(พุ(ท|)ธ))/,/(พฤหัส|พฤ)/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
+    const date = [/(จันทร์)/,/(อังคาร)/,/(พุ(ท|)ธ)/,/พฤหัส/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
     const datespec = [/วันนี้/,/พรุ่งนี้/,/มะรืน/]
    
 
@@ -148,9 +148,7 @@ function convertDateToNumber( s ) {   //return {input,[]result }
       return  cv[0]      
      else return '' } ).filter(isSpace)     
     
-   
-
-    
+  
   const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0] ,'option': datespec2[0]  }
   console.log(result)
   const timeObj=  { 'time': result  , 'strDate': s }
@@ -168,10 +166,8 @@ function convertTime( s ) {
        const resultMatch = s.match(result)
       // console.log(resultMatch[0])
      }
-
      const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
      const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
-
 }
   
  function createTimeObject(date,h,m)
@@ -230,6 +226,7 @@ function convertTime( s ) {
 }
 function mergeAndCreateDateAndTime ( time, date) 
 {
+     console.log(date, time)
      if(time.result.length!=0){
         return time.result.map( (v) => {         
           if(v !== undefined )                 
@@ -265,57 +262,82 @@ function thaiRegexTime( v ) {
           //console.log(result) 
          return   result
 }
-function corectSentece(s)
+function replaceabbreviation (s)
 {
    console.log(s)
-    if( (/(จ\.|จัน)/).test(s))
-     {
-          s= s.replace(/(จ\.)/,'จันทร์ 7:00')
-          console.log(s)
-     }
+   
+   const word = [/จ\./g,/อ\./g,/พ\./g,/พฤ\./g,/ศ\./g,/ส\./g,/อา\./g,/วพนน\./g,/วมรร\./g]
+  //  const word2 =[/จันทร์/gi,/อังคาร/gi,/พุธ/gi,/พฤหัส/gi,/ศุกร์/gi,/เสาร์/gi,/อาทิตย์/gi,/พรุ่งนี้/gi,/มะรืน/gi]
+   const word2 =[/จันทร์/g,/อังคาร/g,/พุธ/g,/พฤหัส/g,/ศุกร์/g,/เสาร์/g,/อาทิตย์/g,/พรุ่งนี้/g,/มะรืน/g ]
+   const fullword = ['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์']
+  
+   const fullword3 =[ 'วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัส','วันศุกร์','วันเสาร์','วันอาทิตย์','วันพรุ่งนี้','วันมะรืน']
+   const strword = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.','วพนน.','วมรร.']
  
+   const strword2=['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','พรุ่งนี้','มะรืน']
+   
+         
+              
+ s = s.replace(/วัน/g,'') 
+                 console.log(s);
+    
+ 
+   word.forEach((v,i)=>{ 
+          while ((match = v.exec(s)) != null) {
+            console.log( v ,"match found at " + match.index);
+              s = s.replace(strword[i],fullword[i])               
+           console.log(s)
+          }      
+   })  
+    word2.forEach((v,i)=>{ 
+          while ((match = v.exec(s)) != null) {
+            console.log( v ,"match found at " + match.index);
+             s = s.replace( word2[i] , strword[i])         
+           //console.log(s)
+          }      
+   }) 
+    word.forEach((v,i)=>{ 
+          while ((match = v.exec(s)) != null) {
+            console.log( v ,"match found at " + match.index);
+              s = s.replace(strword[i],fullword3[i])               
+           console.log(s)
+          }      
+   })  
+  console.log(s)
   return s
 }
 
-function splitWordWithPlusSign( s){
-  
-   
-   // s= corectSentece(s)
+function splitWordWithPlusSign(s){     
+    s= replaceabbreviation(s)
     const input =  spliteDate(s)
+    input.map((v)=>{
+      v.replace(' วัน','' )
+    })
     console.log(input)
     if(input === undefined) {
         const ans = thaiRegexTime(s)
         console.log(ans)
         if(ans === undefined) return
-        else return ans
-       
+        else return ans       
     }
-
-    return  input.map( v =>  thaiRegexTime(v) )
-    
+   return  input.map( v =>  thaiRegexTime(v) )    
 }
 
-const testSet1 = text3.map( (v) =>  thaiRegexTime(v)  )
+// const testSet1 = text3.map( (v) =>  thaiRegexTime(v)  )
 
-console.log(...testSet1)
+// console.log(...testSet1)
 
-testSet1.forEach( (v) => {
-  if(v.output!==undefined){
-      v.output.forEach( (f) => {
-        if(f!= undefined)
-        console.log(f.locale('th').format("dddd, MMMM Do YYYY, h:mm:ss "))         
-      })   
-    }
-}) 
+// testSet1.forEach( (v) => {
+//   if(v.output!==undefined){
+//       v.output.forEach( (f) => {
+//         if(f!= undefined)
+//         console.log(f.locale('th').format("dddd, MMMM Do YYYY, h:mm:ss "))         
+//       })   
+//     }
+// }) 
 //cutstring with date keyword
 function spliteDate(s) 
-{
-   
-  
-   
-  
-  
-
+{   
   let input = s
   console.log('print input',s)
   const dateregex3 = /(วันนี้|พรุ่งนี้|มะรืน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)/gi
@@ -339,8 +361,9 @@ function spliteDate(s)
   valueB["วันอังคาร"]=8
   valueB["วันอาทิตย์"]=9
   valueB["วันเสาร์"]=10 
- const output = regexes.map((v)=>{
-     const sa = s.match(v)
+ 
+ const output = regexes.map((v)=>{      
+   const sa = s.match(v)
           .filter(isSpace)
 
    const removespace=sa.map((v)=> v.trim())
@@ -377,8 +400,9 @@ const a = output[0]
 const b = output[1]
 if(a === undefined || b === undefined) return
  
-console.log( a) 
-console.log( b)
+// console.log( a) 
+// console.log( b)
+
 let i =0 ,j=0;
 let anss=[]
 let ansNum=[]
@@ -449,7 +473,7 @@ console.log(ansNum2)
 // console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ 10 โมง 9 โมง 11:00  วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
 // console.log(splitWordWithPlusSign(" ไปโรบินสัน 19.00 19:00"))
 // console.log(splitWordWithPlusSign(" ไปโรบินสัน  "))
-// console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
+ // console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
 // console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
 // console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
 // console.log(splitWordWithPlusSign("วันนี้"))
@@ -465,5 +489,7 @@ console.log(ansNum2)
 // console.log(splitWordWithPlusSign("พุทธ"))
 // console.log(splitWordWithPlusSign("พุท"))
 // console.log(splitWordWithPlusSign("พุทธ"))
-  console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
-   console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
+// console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
+// console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
+
+ console.log(splitWordWithPlusSign("จ. 11.55   อ. 10.20   พุธ 14.00 วันพุธ 16.00  พ. 12.00  พฤ. 13.00  ศ. 6.30  ส. 11.50  อ. 14.23  อาทิตย์ 14.20 อังคาร 22.30 อาทิตย์ 15.00  พรุ่งนี้  มะรืน วันพรุ่งนี้ วันมะรืน"))
