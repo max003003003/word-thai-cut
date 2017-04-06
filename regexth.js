@@ -266,54 +266,54 @@ function replaceabbreviation (s)
 {
    console.log(s)
    
-   const word = [/จ\./g,/อ\./g,/พ\./g,/พฤ\./g,/ศ\./g,/ส\./g,/อา\./g,/วพนน\./g,/วมรร\./g]
+   const word = [/จ\./g,/อ\./g,/พ\./g,/พฤ\./g,/ศ\./g,/ส\./g,/อา\./g,/วนน\./g,/วพนน\./g,/วมรร\./g]
   //  const word2 =[/จันทร์/gi,/อังคาร/gi,/พุธ/gi,/พฤหัส/gi,/ศุกร์/gi,/เสาร์/gi,/อาทิตย์/gi,/พรุ่งนี้/gi,/มะรืน/gi]
-   const word2 =[/จันทร์/g,/อังคาร/g,/พุธ/g,/พฤหัส/g,/ศุกร์/g,/เสาร์/g,/อาทิตย์/g,/พรุ่งนี้/g,/มะรืน/g ]
-   const fullword = ['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์']
+   const word2 =[/จันทร์/g,/อังคาร/g,/พุธ/g,/พฤหัส/g,/ศุกร์/g,/เสาร์/g,/อาทิตย์/g,/วันนี้/gi,/พรุ่งนี้/g,/มะรืน/g ]
+   const fullword = ['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','วันนี้','วันพรุ่งนี้','วันมะรืน']
   
-   const fullword3 =[ 'วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัส','วันศุกร์','วันเสาร์','วันอาทิตย์','วันพรุ่งนี้','วันมะรืน']
-   const strword = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.','วพนน.','วมรร.']
+   const fullword3 =[ 'วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัส','วันศุกร์','วันเสาร์','วันอาทิตย์','วันนี้','วันพรุ่งนี้','วันมะรืน']
+   const strword = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.','วนน.','วพนน.','วมรร.']
  
-   const strword2=['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','พรุ่งนี้','มะรืน']
-   
+   const strword2=['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','นนี้','พรุ่งนี้','มะรืน']   
          
-              
- s = s.replace(/วัน/g,'') 
-                 console.log(s);
-    
+  s = s.replace(/วันนี้/g,'วนน.')
+  s = s.replace(/วัน/g,'') 
+                  console.log(s);    
  
    word.forEach((v,i)=>{ 
           while ((match = v.exec(s)) != null) {
-            console.log( v ,"match found at " + match.index);
+            // console.log( v ,"match found at " + match.index);
               s = s.replace(strword[i],fullword[i])               
-           console.log(s)
+           //console.log(s)
           }      
    })  
+  // console.log(s)
     word2.forEach((v,i)=>{ 
           while ((match = v.exec(s)) != null) {
-            console.log( v ,"match found at " + match.index);
+           //  console.log( v ,"match found at " + match.index);
              s = s.replace( word2[i] , strword[i])         
-           //console.log(s)
+         //  console.log(s)
           }      
    }) 
     word.forEach((v,i)=>{ 
           while ((match = v.exec(s)) != null) {
-            console.log( v ,"match found at " + match.index);
+            //console.log( v ,"match found at " + match.index);
               s = s.replace(strword[i],fullword3[i])               
-           console.log(s)
+           // console.log(s)
           }      
    })  
-  console.log(s)
+ // console.log(s)
   return s
 }
 
 function splitWordWithPlusSign(s){     
     s= replaceabbreviation(s)
+     
     const input =  spliteDate(s)
-    input.map((v)=>{
-      v.replace(' วัน','' )
-    })
-    console.log(input)
+    // input.map((v)=>{
+    //   v.replace('นี้','' )
+    // })
+    console.log(s)
     if(input === undefined) {
         const ans = thaiRegexTime(s)
         console.log(ans)
@@ -473,23 +473,22 @@ console.log(ansNum2)
 // console.log(splitWordWithPlusSign(" อังคาร ไป 10 โมง  โรบินสันนะครับ   พุธ ไป พัทยา  เสาร์ วันอังคาร วันเสาร์  วันนี้ 9โมง 10 โมง อังคาร จันทร์นี้ 10 โมง 9 โมง 11:00  วันพรุ่งนี้ พรุ่งนี้ วันมะรืน  วันนี้ 5 ทุ่ม วันนี้ จะไปดูหนัง"))
 // console.log(splitWordWithPlusSign(" ไปโรบินสัน 19.00 19:00"))
 // console.log(splitWordWithPlusSign(" ไปโรบินสัน  "))
- // console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
+//console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
 // console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
 // console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
-// console.log(splitWordWithPlusSign("วันนี้"))
-// console.log(splitWordWithPlusSign("วันนี้ 9 โมง 50 นาที "))
-// console.log(splitWordWithPlusSign("มะรืน "))
-// console.log(splitWordWithPlusSign("มะรืน 14.25"))
-// console.log(splitWordWithPlusSign("พรุ่งนี้"))
-// console.log(splitWordWithPlusSign("พรุ่งนี้  13.22"))
-// console.log(splitWordWithPlusSign("จันทร์ ไปโรบินสัน จัน ")) 
-// console.log(splitWordWithPlusSign("จ.  "))
-// console.log(splitWordWithPlusSign("อังคาร"))
-// console.log(splitWordWithPlusSign("อ"))
-// console.log(splitWordWithPlusSign("พุทธ"))
-// console.log(splitWordWithPlusSign("พุท"))
-// console.log(splitWordWithPlusSign("พุทธ"))
-// console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
-// console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
-
- console.log(splitWordWithPlusSign("จ. 11.55   อ. 10.20   พุธ 14.00 วันพุธ 16.00  พ. 12.00  พฤ. 13.00  ศ. 6.30  ส. 11.50  อ. 14.23  อาทิตย์ 14.20 อังคาร 22.30 อาทิตย์ 15.00  พรุ่งนี้  มะรืน วันพรุ่งนี้ วันมะรืน"))
+console.log(splitWordWithPlusSign("วันนี้"))
+console.log(splitWordWithPlusSign("วันนี้ 9 โมง 50 นาที "))
+console.log(splitWordWithPlusSign("มะรืน "))
+console.log(splitWordWithPlusSign("มะรืน 14.25"))
+console.log(splitWordWithPlusSign("พรุ่งนี้"))
+console.log(splitWordWithPlusSign("พรุ่งนี้  13.22"))
+console.log(splitWordWithPlusSign("จันทร์ ไปโรบินสัน จัน ")) 
+console.log(splitWordWithPlusSign("จ.  "))
+console.log(splitWordWithPlusSign("อังคาร"))  //
+console.log(splitWordWithPlusSign("อ"))
+console.log(splitWordWithPlusSign("พุทธ"))
+console.log(splitWordWithPlusSign("พุท"))
+console.log(splitWordWithPlusSign("พุทธ"))
+console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
+console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
+console.log(splitWordWithPlusSign("จ. 11.55 13.00 21.00 15.00  19.25  อ. 10.20   พุธ 14.00 วันพุธ 16.00  พ. 12.00  พฤ. 13.00  ศ. 6.30  ส. 11.50  อ. 14.23  อาทิตย์ 14.20 อังคาร 22.30 อาทิตย์ 15.00  พรุ่งนี้  มะรืน วันพรุ่งนี้ วันมะรืน"))//ไม่ใช่วันนี้เป็น 7.00 
