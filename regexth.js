@@ -269,11 +269,9 @@ function replaceabbreviation (s)
    const word = [/จ\./g,/อ\./g,/พ\./g,/พฤ\./g,/ศ\./g,/ส\./g,/อา\./g,/วนน\./g,/วพนน\./g,/วมรร\./g]
   //  const word2 =[/จันทร์/gi,/อังคาร/gi,/พุธ/gi,/พฤหัส/gi,/ศุกร์/gi,/เสาร์/gi,/อาทิตย์/gi,/พรุ่งนี้/gi,/มะรืน/gi]
    const word2 =[/จันทร์/g,/อังคาร/g,/พุธ/g,/พฤหัส/g,/ศุกร์/g,/เสาร์/g,/อาทิตย์/g,/วันนี้/gi,/พรุ่งนี้/g,/มะรืน/g ]
-   const fullword = ['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','วันนี้','วันพรุ่งนี้','วันมะรืน']
-  
+   const fullword = ['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','วันนี้','วันพรุ่งนี้','วันมะรืน']  
    const fullword3 =[ 'วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัส','วันศุกร์','วันเสาร์','วันอาทิตย์','วันนี้','วันพรุ่งนี้','วันมะรืน']
-   const strword = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.','วนน.','วพนน.','วมรร.']
- 
+   const strword = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.','วนน.','วพนน.','วมรร.'] 
    const strword2=['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์','นนี้','พรุ่งนี้','มะรืน']   
          
   s = s.replace(/วันนี้/g,'วนน.')
@@ -313,13 +311,21 @@ function splitWordWithPlusSign(s){
     // input.map((v)=>{
     //   v.replace('นี้','' )
     // })
-    console.log(s)
+    console.log(input)
     if(input === undefined) {
         const ans = thaiRegexTime(s)
         console.log(ans)
         if(ans === undefined) return
-        else return ans       
+        else 
+        { 
+          //console.log(ans)
+          var aa=[]
+          aa.push(ans)  
+         //  console.log(aa)    
+        return aa
+        }
     }
+          
    return  input.map( v =>  thaiRegexTime(v) )    
 }
 
@@ -476,19 +482,20 @@ console.log(ansNum2)
 //console.log(splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"))
 // console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
 // console.log(splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที "))
-console.log(splitWordWithPlusSign("วันนี้"))
-console.log(splitWordWithPlusSign("วันนี้ 9 โมง 50 นาที "))
-console.log(splitWordWithPlusSign("มะรืน "))
-console.log(splitWordWithPlusSign("มะรืน 14.25"))
-console.log(splitWordWithPlusSign("พรุ่งนี้"))
-console.log(splitWordWithPlusSign("พรุ่งนี้  13.22"))
-console.log(splitWordWithPlusSign("จันทร์ ไปโรบินสัน จัน ")) 
-console.log(splitWordWithPlusSign("จ.  "))
-console.log(splitWordWithPlusSign("อังคาร"))  //
-console.log(splitWordWithPlusSign("อ"))
-console.log(splitWordWithPlusSign("พุทธ"))
-console.log(splitWordWithPlusSign("พุท"))
-console.log(splitWordWithPlusSign("พุทธ"))
-console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
-console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
-console.log(splitWordWithPlusSign("จ. 11.55 13.00 21.00 15.00  19.25  อ. 10.20   พุธ 14.00 วันพุธ 16.00  พ. 12.00  พฤ. 13.00  ศ. 6.30  ส. 11.50  อ. 14.23  อาทิตย์ 14.20 อังคาร 22.30 อาทิตย์ 15.00  พรุ่งนี้  มะรืน วันพรุ่งนี้ วันมะรืน"))//ไม่ใช่วันนี้เป็น 7.00 
+// console.log(splitWordWithPlusSign("วันนี้"))
+// console.log(splitWordWithPlusSign("วันนี้ 9 โมง 50 นาที "))
+// console.log(splitWordWithPlusSign("มะรืน "))
+// console.log(splitWordWithPlusSign("มะรืน 14.25"))
+// console.log(splitWordWithPlusSign("พรุ่งนี้"))
+// console.log(splitWordWithPlusSign("พรุ่งนี้  13.22"))
+// console.log(splitWordWithPlusSign("จันทร์ ไปโรบินสัน จัน ")) 
+// console.log(splitWordWithPlusSign("จ.  "))
+// console.log(splitWordWithPlusSign("อังคาร"))  //
+// console.log(splitWordWithPlusSign("อ"))
+// console.log(splitWordWithPlusSign("พุทธ"))
+// console.log(splitWordWithPlusSign("พุท"))
+// console.log(splitWordWithPlusSign("พุทธ"))
+// console.log(splitWordWithPlusSign("วันอังคาร 11.00 "))
+// console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
+// console.log(splitWordWithPlusSign("จ. 11.55 13.00 21.00 15.00  19.25  อ. 10.20   พุธ 14.00 วันพุธ 16.00  พ. 12.00  พฤ. 13.00  ศ. 6.30  ส. 11.50  อ. 14.23  อาทิตย์ 14.20 อังคาร 22.30 อาทิตย์ 15.00  พรุ่งนี้  มะรืน วันพรุ่งนี้ วันมะรืน"))//ไม่ใช่วันนี้เป็น 7.00 
+console.log(splitWordWithPlusSign("  ากาด่วห่กด"))
