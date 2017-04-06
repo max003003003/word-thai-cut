@@ -162,9 +162,11 @@ function convertTime( s ) {
 
      if(regexTime.test(s) !== false )
      {
+
        const result = /(\d\d|\d)/
        const resultMatch = s.match(result)
       // console.log(resultMatch[0])
+      
      }
      const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
      const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
@@ -211,10 +213,8 @@ function convertTime( s ) {
                  case 1: dateR = moment().add(1,'day').hour(parseInt(h)).minute(parseInt(m))  
                         break 
                  case 2: dateR = moment().add(2,'day').hour(parseInt(h)).minute(parseInt(m))  
-                        break        
-
-               }
-              
+                        break       
+               }              
            }
            else {
            
