@@ -1,7 +1,7 @@
 const app = angular.module('App',['firebase'])
 let simple 
 
-let db =new PouchDB('fibaseTest')
+let db =new PouchDB('fibaseTest' )
 
   db.info().then((info) =>{
     console.log(info);
