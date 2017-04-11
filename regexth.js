@@ -487,21 +487,34 @@ function splitWordWithPlusSign(s){
 function spliteDate(s) {
    //const dateregex4 = /(วันนี้|วันพรุ่งนี้|วันมะรืน|วันที่)/g
    let resultposition  = []
-   const dateregexall =  [/วันจันทร์/gi,/วันอังคาร/gi,/วันพุธ/gi,/วันพฤหัส/gi,/วันศุกร์/gi,/วันเสาร์/gi,/วันอาทิตย์/gi,/วันนี้/gi,/วันพรุ่งนี้/gi,/วันมะรืน/gi,/วันที่/gi ]
+   const dateregexall =  [/วันจันทร์/gi,/วันอังคาร/gi,/วันพุธ/gi,/วันพฤหัส/gi,/วันศุกร์/gi,/วันเสาร์/gi,/วันอาทิตย์/gi,/วันนี้/gi,/วันพรุ่งนี้/gi,/วันมะรืน/gi,/วันที่/gi,/([1-2][0-9]|[0-9])(มกรา|กุมภา)/gi ]
+   s=s.replace(/\s/gi,'')    
    dateregexall.map((v)=>{     
-      while ((match = v.exec(s)) != null) {            
+      while ((match = v.exec(s)) != null) {       
+           console.log(match)   
            resultposition.push(match.index)
         }
    })
    resultposition= resultposition.sort();
-   //console.log(resultposition)
- 
+   temparray = resultposition.slice()
+   // กำจัด index ของคำที่ เป็นประโยคเดียวกัน วันจันทร์ 17 มกราคม =>['วันจันทร์','17 มกราคม' ] เป็นประโยคเดียวกัน
+   for(let i=0;i<resultposition.length-1;i++)
+   {
+        if(resultposition[i+1]-resultposition[i]<=10) //ในกรณีของวันจันทร์ นั้น จำนวนตัวอักษร เท่ากับ 9  วันอาทิตย์ เท่ากับ 10
+        {
+           var index = resultposition.indexOf(resultposition[i+1])
+           temparray.splice(index,1)
+        }
+   }
+   resultposition=temparray 
    let result = resultposition.map((v)=>{
        
-        s= s.substring(0, v) + "," + s.substring(v)
-       
+        s= s.substring(0, v) + "," + s.substring(v)       
     
    })
+   
+  console.log(s)
+    
    const resultall = s.split(",").filter((v)=>{
      return v!==""
    })
@@ -526,7 +539,7 @@ function spliteDate(s) {
 // console.log(splitWordWithPlusSign("จันทร์ ไปโรบินสัน จัน ")) 
 // console.log(splitWordWithPlusSign("จ.  "))
 // console.log(splitWordWithPlusSign("อังคาร"))  //
-// console.log(splitWordWithPlusSign("อ"))
+// console.l og(splitWordWithPlusSign("อ"))
 // console.log(splitWordWithPlusSign("พุทธ"))
 // console.log(splitWordWithPlusSign("พุท"))
 // console.log(splitWordWithPlusSign("พุทธ"))
@@ -534,7 +547,8 @@ function spliteDate(s) {
 // console.log(splitWordWithPlusSign("วันอังคาร 17.00 "))
 // console.log(splitWordWithPlusSign("จ. 11.55 13.00 21.00 15.00  19.25  อ. 10.20   พุธ 14.00 วันพุธ 16.00  พ. 12.00  พฤ. 13.00  ศ. 6.30  ส. 11.50  อ. 14.23  อาทิตย์ 14.20 อังคาร 22.30 อาทิตย์ 15.00  พรุ่งนี้  มะรืน วันพรุ่งนี้ วันมะรืน"))//ไม่ใช่วันนี้เป็น 7.00 
 // console.log(splitWordWithPlusSign("  ากาด่วห่กด"))
-  console.log(splitWordWithPlusSign("วันที่ 24 ไป วันจันทร์ จตุจักร  จันทร์ ไปโรบินสัน "))
+ // console.log(splitWordWithPlusSign("วันที่ 24 ไป วันจันทร์ จตุจักร  จันทร์ ไปโรบินสัน "))
 //console.log(splitWordWithPlusSign("พฤษภาคม"))
 // 15 เมษา ไปโร วันพรุ่งนี้ ไป พัทยา  
+console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วัน "))
  
