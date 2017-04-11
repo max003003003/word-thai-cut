@@ -488,7 +488,7 @@ function spliteDate(s) {
    //const dateregex4 = /(วันนี้|วันพรุ่งนี้|วันมะรืน|วันที่)/g
    let resultposition  = []
    const dateregexall =  [/วันจันทร์/gi,/วันอังคาร/gi,/วันพุธ/gi,/วันพฤหัส/gi,/วันศุกร์/gi,/วันเสาร์/gi,/วันอาทิตย์/gi,/วันนี้/gi,/วันพรุ่งนี้/gi,/วันมะรืน/gi,/วันที่/gi,/([1-2][0-9]|[0-9])(มกรา|กุมภา)/gi ]
-   s=s.replace(/\s/gi,'')    
+   s=s.replace(/\s/gi,'')    //เอาช่องว่างระหว่างคำออก 
    dateregexall.map((v)=>{     
       while ((match = v.exec(s)) != null) {       
            console.log(match)   
