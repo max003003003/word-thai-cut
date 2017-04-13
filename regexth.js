@@ -174,6 +174,7 @@ function convertTime( s ) {
   
  function createTimeObject(date,h,m)
  {      
+   console.log(date)
      
         // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
       if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {         
@@ -181,16 +182,24 @@ function convertTime( s ) {
          // console.log('Match Date number ',dateR)
           const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
           return dateR
-      } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้        
-              if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) <= moment().isoWeekday(date.date)  ) {    
-                //console.log('Match day of week',dateR)
-                  const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+      } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้   
+        //
+            if(moment().isoWeekday() == date.date){  // วันอัคาร แบบ ไม่ระบุ เวลา เท่ากับ วันนี้ รึป่าว
+                if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) <= moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
+                  //console.log('Match day of week',dateR)                
+                    const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                    return dateR
+                }
+                else {
+                  const dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
                   return dateR
-              } else  {
-               // console.log('Match day of week',dateR)
-                const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                }
+            }              
+           else  { // วันไม่เท่าวันนี้ จะ บวก 1 อาทิตย์
+                //console.log('Match day of week 2',dateR)
+                const dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
                 return dateR
-              }           
+          }           
     } else  if( isNaN(date.datenumber) && date.date === undefined && date.month !== undefined)     {            // มีนาคม ==> วันแรก ของ เดือนนั้นๆ
             const dateR = moment().month(date.month).date(1).hour(parseInt(h)).minute(parseInt(m))
             console.log('Match Month  ',dateR)
@@ -506,20 +515,25 @@ function spliteDate(s) {
            temparray.splice(index,1)
         }
    }
-   resultposition=temparray 
-   let result = resultposition.map((v)=>{
-       
-        s= s.substring(0, v) + "," + s.substring(v)       
+   //-------------------resultpostition=[0,18] เอาไปตัดคำ
+   console.log(resultposition)
+  
+   answer = []
+   for(let i=0;i<resultposition.length;i++) 
+   {
+     if(i==resultposition.length-1)
+     {
+     
+       answer.push(s.substr(resultposition[i]))
+       break;
+     }
+     //console.log(resultposition[i],resultposition[i+1])
+     answer.push(s.substr(resultposition[i],resultposition[i+1]-resultposition[i]))
+   }
     
-   })
-   
-  console.log(s)
-    
-   const resultall = s.split(",").filter((v)=>{
-     return v!==""
-   })
-   console.log(s.split(","))
-   return resultall
+   console.log(answer)
+   //------------------------- 
+ return answer
 }
 
 
@@ -550,5 +564,5 @@ function spliteDate(s) {
  // console.log(splitWordWithPlusSign("วันที่ 24 ไป วันจันทร์ จตุจักร  จันทร์ ไปโรบินสัน "))
 //console.log(splitWordWithPlusSign("พฤษภาคม"))
 // 15 เมษา ไปโร วันพรุ่งนี้ ไป พัทยา  
-console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วัน "))
+console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ"))
  
