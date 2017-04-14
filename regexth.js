@@ -184,7 +184,7 @@ function convertTime( s ) {
           return dateR
       } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้   
         //
-            if(moment().isoWeekday() == date.date){  // วันอัคาร แบบ ไม่ระบุ เวลา เท่ากับ วันนี้ รึป่าว
+            if(moment().isoWeekday() == date.date){  // วันอังคาร แบบ ไม่ระบุ เวลา เท่ากับ วันนี้ รึป่าว
                 if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) <= moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
                   //console.log('Match day of week',dateR)                
                     const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
@@ -196,9 +196,19 @@ function convertTime( s ) {
                 }
             }              
            else  { // วันไม่เท่าวันนี้ จะ บวก 1 อาทิตย์
+
+                 if(moment().isoWeekday(date.date)< moment()) //เช็คว่า วันนั้นๆในสัปดาห์ ผ่านมาแล้วหรือยัง ถ้าผ่านมาแล้ว จะ+1 week
+                 {
+                         const dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
+                          return dateR
+
+                 }else  if(moment().isoWeekday(date.date)> moment()) {
+                        const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                         return dateR
+                 }
                 //console.log('Match day of week 2',dateR)
-                const dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
-                return dateR
+                
+               
           }           
     } else  if( isNaN(date.datenumber) && date.date === undefined && date.month !== undefined)     {            // มีนาคม ==> วันแรก ของ เดือนนั้นๆ
             const dateR = moment().month(date.month).date(1).hour(parseInt(h)).minute(parseInt(m))
@@ -495,45 +505,72 @@ function splitWordWithPlusSign(s){
 
 function spliteDate(s) {
    //const dateregex4 = /(วันนี้|วันพรุ่งนี้|วันมะรืน|วันที่)/g
+   let original = s.substr(0)
+    
+
    let resultposition  = []
+   let resultOfOriginal = []
    const dateregexall =  [/วันจันทร์/gi,/วันอังคาร/gi,/วันพุธ/gi,/วันพฤหัส/gi,/วันศุกร์/gi,/วันเสาร์/gi,/วันอาทิตย์/gi,/วันนี้/gi,/วันพรุ่งนี้/gi,/วันมะรืน/gi,/วันที่/gi,/([1-2][0-9]|[0-9])(มกรา|กุมภา)/gi ]
    s=s.replace(/\s/gi,'')    //เอาช่องว่างระหว่างคำออก 
    dateregexall.map((v)=>{     
       while ((match = v.exec(s)) != null) {       
            console.log(match)   
-           resultposition.push(match.index)
+           resultposition.push(match.index)                      
+        }
+   
+   }) 
+   dateregexall.map((v) =>{
+     while ((match2 = v.exec(original)) != null) {       
+           console.log(match2)   
+           resultOfOriginal.push(match2.index)                      
         }
    })
+   
    resultposition= resultposition.sort();
    temparray = resultposition.slice()
+ 
+   resultOfOriginal = resultOfOriginal.sort()
+   tempForOriginal = resultOfOriginal.slice()
+
+  //  console.log(temparray)
+  //  console.log(tempForOriginal)
    // กำจัด index ของคำที่ เป็นประโยคเดียวกัน วันจันทร์ 17 มกราคม =>['วันจันทร์','17 มกราคม' ] เป็นประโยคเดียวกัน
    for(let i=0;i<resultposition.length-1;i++)
    {
         if(resultposition[i+1]-resultposition[i]<=10) //ในกรณีของวันจันทร์ นั้น จำนวนตัวอักษร เท่ากับ 9  วันอาทิตย์ เท่ากับ 10
         {
+            
            var index = resultposition.indexOf(resultposition[i+1])
            temparray.splice(index,1)
+           tempForOriginal.splice(index,1)
+            
         }
    }
    //-------------------resultpostition=[0,18] เอาไปตัดคำ
-   console.log(resultposition)
-  
+  //  console.log(temparray)
+  //  console.log(tempForOriginal)
+     
    answer = []
+   answerForOriginal = []
    for(let i=0;i<resultposition.length;i++) 
    {
      if(i==resultposition.length-1)
      {
      
        answer.push(s.substr(resultposition[i]))
+       answerForOriginal.push(original.substr(resultOfOriginal[i]))
        break;
      }
      //console.log(resultposition[i],resultposition[i+1])
      answer.push(s.substr(resultposition[i],resultposition[i+1]-resultposition[i]))
+     answerForOriginal.push(original.substr(resultOfOriginal[i],resultOfOriginal[i+1]-resultOfOriginal[i]))
+     
    }
     
-   console.log(answer)
+  //  console.log(answer)
+  //  console.log(answerForOriginal)
    //------------------------- 
- return answer
+ return answerForOriginal
 }
 
 
@@ -564,5 +601,5 @@ function spliteDate(s) {
  // console.log(splitWordWithPlusSign("วันที่ 24 ไป วันจันทร์ จตุจักร  จันทร์ ไปโรบินสัน "))
 //console.log(splitWordWithPlusSign("พฤษภาคม"))
 // 15 เมษา ไปโร วันพรุ่งนี้ ไป พัทยา  
-console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ"))
- 
+//console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ"))
+ console.log(splitWordWithPlusSign("วันจันทร์ 22.30  วันอังคาร 11.25  วันศุกร์ 13.00 วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที วันเสาร์ 13.20"))
