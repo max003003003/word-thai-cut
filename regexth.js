@@ -621,4 +621,5 @@ function spliteDate(s) {
 //console.log(splitWordWithPlusSign("วันจันทร์ 22.30  วันอังคาร 11.25  วันศุกร์ 13.00 วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที วันเสาร์ 13.20"))
 // console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ จันทร์1 พฤษภา 11.00 "))
 //console.log( splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 23 นาฬิกา 9 นาที "))
-console.log(splitWordWithPlusSign("17 มกราคม โรบินสัน พัทยา"))
+// console.log(splitWordWithPlusSign("17 มกราคม โรบินสัน พัทยา"))
+console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))

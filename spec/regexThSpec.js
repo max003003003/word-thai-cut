@@ -1,13 +1,3 @@
-// describe('Regex wednesday test',function(){
-//   it('should be able to produce object wednesday',function(){
-//          var result =  splitWordWithPlusSign("วัน พุธ 8 โมง ")              
-//          expect("2017-04-05 08:00").toEqual(result.output[0].format("YYYY-MM-DD HH:mm")) 
-
-//          result =  splitWordWithPlusSign(" ไปโรบินสัน  ")
-//          expect(undefined).toEqual(result.output)
-//   })
-// })
-
 function dayNeed(dayINeed)
 {
     if (moment().isoWeekday() <= dayINeed) { 
@@ -19,13 +9,14 @@ function dayNeed(dayINeed)
   }
 }
 describe('xx โมง xx นาที และ ระบบ ตัดคำ',function(){
-  it("should be able to make correct time", function(){
-      // var result =  splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที ") 
-      // expect("09:05").toEqual(result.output[0].format("HH:mm"))
+  it("should be able to make correct time", function(){     
 
       result2 = splitWordWithPlusSign("วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน วันจันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00")
    
-      expect(moment().day(7).hours(11).minute(45).format("YYYY-MM-DD HH:mm")).toEqual(result2[0].output[0].format("YYYY-MM-DD HH:mm"))
+      expect(dayNeed(7).hours(11).minute(45).format("YYYY-MM-DD HH:mm")).toEqual(result2[0].output[0].format("YYYY-MM-DD HH:mm"))
+      expect(dayNeed(7).hours(10).minute(45).format("YYYY-MM-DD HH:mm")).toEqual(result2[0].output[1].format("YYYY-MM-DD HH:mm"))
+      expect(dayNeed(1).hours(8).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result2[1].output[0].format("YYYY-MM-DD HH:mm"))
+      expect(dayNeed(1).hours(18).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result2[1].output[1].format("YYYY-MM-DD HH:mm"))
       
       result3 = splitWordWithPlusSign("วันจันทร์ 22.30  วันอังคาร 11.25  วันศุกร์ 13.00 วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที วันเสาร์ 13.20")
       expect(dayNeed(1).hours(22).minute(30).format("YYYY-MM-DD HH:mm")).toEqual(result3[0].output[0].format("YYYY-MM-DD HH:mm"))
@@ -78,23 +69,23 @@ describe('คำย่อ ไม่มีเวลา ',function(){
     expect(dayNeed(7).hours(10).minute(25).format("YYYY-MM-DD HH:mm")).toEqual(result12[0].output[1].format("YYYY-MM-DD HH:mm"))
     expect(dayNeed(7).hours(23).minute(9).format("YYYY-MM-DD HH:mm")).toEqual(result12[0].output[2].format("YYYY-MM-DD HH:mm"))
 
-  //   let result10 = splitWordWithPlusSign("จ. 11 โ ")
-  //   expect(dayNeed(1).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result10[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result10 = splitWordWithPlusSign("จ. 11 โมง 20 นาที ")
+    expect(dayNeed(1).hours(11).minute(20).format("YYYY-MM-DD HH:mm")).toEqual(result10[0].output[0].format("YYYY-MM-DD HH:mm"))
 
-  //   let result18 = splitWordWithPlusSign("อ.  ")
-  //   expect(dayNeed(2).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result18 = splitWordWithPlusSign("อ.  ")
+    expect(dayNeed(2).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[0].format("YYYY-MM-DD HH:mm"))
 
-  //   let result19 = splitWordWithPlusSign("พ.  ")
-  //   expect(dayNeed(3).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result19[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result19 = splitWordWithPlusSign("พ.  ")
+    expect(dayNeed(3).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result19[0].output[0].format("YYYY-MM-DD HH:mm"))
 
-  //   let result20 = splitWordWithPlusSign("พฤ.  ")
-  //   expect(dayNeed(4).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result20[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result20 = splitWordWithPlusSign("พฤ.  ")
+    expect(dayNeed(4).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result20[0].output[0].format("YYYY-MM-DD HH:mm"))
 
-  //   let result21 = splitWordWithPlusSign("ศ.  ")
-  //   expect(dayNeed(5).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result21[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result21 = splitWordWithPlusSign("ศ.  ")
+    expect(dayNeed(5).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result21[0].output[0].format("YYYY-MM-DD HH:mm"))
 
-  //   let result22 = splitWordWithPlusSign("ส.  ")
-  //   expect(dayNeed(6).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result22[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result22 = splitWordWithPlusSign("ส.  ")
+    expect(dayNeed(6).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result22[0].output[0].format("YYYY-MM-DD HH:mm"))
     })
  
 })
@@ -113,19 +104,19 @@ let result3 = splitWordWithPlusSign("วันนี้")
 expect(moment().format("YYYY-MM-DD HH:mm")).toEqual(result3[0].output[0].format("YYYY-MM-DD HH:mm"))
 
 let result4 = splitWordWithPlusSign("วันนี้ 9 โมง 50 นาที ")
-expect(dayNeed(5).hours(9).minute(50).format("YYYY-MM-DD HH:mm")).toEqual(result4[0].output[0].format("YYYY-MM-DD HH:mm"))
+expect(moment().hours(9).minute(50).format("YYYY-MM-DD HH:mm")).toEqual(result4[0].output[0].format("YYYY-MM-DD HH:mm"))
 
 let result5 = splitWordWithPlusSign("มะรืน ")
-expect(dayNeed(7).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result5[0].output[0].format("YYYY-MM-DD HH:mm"))
+expect(moment().add(2,'day').hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result5[0].output[0].format("YYYY-MM-DD HH:mm"))
 
 let result6 = splitWordWithPlusSign("มะรืน 14.25")
-expect(dayNeed(7).hours(14).minute(25).format("YYYY-MM-DD HH:mm")).toEqual(result6[0].output[0].format("YYYY-MM-DD HH:mm"))
+expect(moment().add(2,'day').hours(14).minute(25).format("YYYY-MM-DD HH:mm")).toEqual(result6[0].output[0].format("YYYY-MM-DD HH:mm"))
 
 let result7 = splitWordWithPlusSign("พรุ่งนี้")
-expect(dayNeed(6).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result7[0].output[0].format("YYYY-MM-DD HH:mm"))
+expect(moment().add(1,'day').hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result7[0].output[0].format("YYYY-MM-DD HH:mm"))
 
 let result8 = splitWordWithPlusSign("พรุ่งนี้  13.22")
-expect(dayNeed(6).hours(13).minute(22).format("YYYY-MM-DD HH:mm")).toEqual(result8[0].output[0].format("YYYY-MM-DD HH:mm"))
+expect(moment().add(1,'day').hours(13).minute(22).format("YYYY-MM-DD HH:mm")).toEqual(result8[0].output[0].format("YYYY-MM-DD HH:mm"))
 
 let result9 = splitWordWithPlusSign("จันทร์ ไปโรบินสัน ")
 expect(dayNeed(1).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result9[0].output[0].format("YYYY-MM-DD HH:mm")) 
