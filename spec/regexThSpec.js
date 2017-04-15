@@ -93,8 +93,8 @@ describe('คำย่อ ไม่มีเวลา ',function(){
 
 describe('วันนี้ มะรืน จ. อ.',function(){
   it('วันที่มีคำย่อ และ วันนี้ พรุ่งนี้ มะรืน',function(){
-    let result1 = splitWordWithPlusSign("วัน พุธ 8 โมง ")
-    expect(dayNeed(3).hours(8).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result1[0].output[0].format("YYYY-MM-DD HH:mm"))    
+let result1 = splitWordWithPlusSign("วัน พุธ 8 โมง ")
+expect(dayNeed(3).hours(8).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result1[0].output[0].format("YYYY-MM-DD HH:mm"))    
 
 
 let result2 = splitWordWithPlusSign("วัน พุธ 9 โมง 5 นาที ")
@@ -122,8 +122,7 @@ let result9 = splitWordWithPlusSign("จันทร์ ไปโรบินส
 expect(dayNeed(1).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result9[0].output[0].format("YYYY-MM-DD HH:mm")) 
 
 let result11 = splitWordWithPlusSign("อังคาร")
-expect(dayNeed(2).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result11[0].output[0].format("YYYY-MM-DD HH:mm"))  //
-
+expect(dayNeed(2).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result11[0].output[0].format("YYYY-MM-DD HH:mm"))  
 
 let result23 = splitWordWithPlusSign("พฤหัส  ")
 expect(dayNeed(4).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result23[0].output[0].format("YYYY-MM-DD HH:mm"))

@@ -196,8 +196,11 @@ function convertTime( s ) {
       } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้   
         //
             if(moment().isoWeekday() == date.date){  // วันอังคาร แบบ ไม่ระบุ เวลา เท่ากับ วันนี้ รึป่าว
-                if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) <= moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
-                  //console.log('Match day of week',dateR)                
+               console.log('Yep')
+                 
+                if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) > moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
+                  //console.log('Match day of week',dateR)       
+                         
                     const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
                     return dateR
                 }
@@ -622,4 +625,5 @@ function spliteDate(s) {
 // console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ จันทร์1 พฤษภา 11.00 "))
 //console.log( splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 23 นาฬิกา 9 นาที "))
 // console.log(splitWordWithPlusSign("17 มกราคม โรบินสัน พัทยา"))
-console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
+// console.log(splitWordWithPlusSign("วัน พุธ 8 โมง "))
+// console.log(splitWordWithPlusSign("วันอาทิตย์  ไปโรบินสัน และ วัน อังคาร ไป พัทยา วันอาทิตย์   "))
