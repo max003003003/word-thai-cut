@@ -1,6 +1,10 @@
 function dayNeed(dayINeed)
 {
-    if (moment().isoWeekday() <= dayINeed) { 
+  if(dayINeed==7)
+  {
+    return moment().add(1,'week').isoWeekday(7)
+  }
+    if (moment() <= moment().isoWeekday(dayINeed)) { 
     // then just give me this week's instance of that day
     return moment().isoWeekday(dayINeed);
   } else {
@@ -64,16 +68,19 @@ describe('คำย่อ ไม่มีเวลา ',function(){
   })
   
   it('คำย่อของ วัน แบบมีเวลา',function(){
-    let result12 = splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 23 นาฬิกา 9 นาที ")
+    let result12 = splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 13 นาฬิกา 9 นาที ")
     expect(dayNeed(7).hours(7).minute(50).format("YYYY-MM-DD HH:mm")).toEqual(result12[0].output[0].format("YYYY-MM-DD HH:mm"))
     expect(dayNeed(7).hours(10).minute(25).format("YYYY-MM-DD HH:mm")).toEqual(result12[0].output[1].format("YYYY-MM-DD HH:mm"))
-    expect(dayNeed(7).hours(23).minute(9).format("YYYY-MM-DD HH:mm")).toEqual(result12[0].output[2].format("YYYY-MM-DD HH:mm"))
+    expect(dayNeed(7).hours(13).minute(9).format("YYYY-MM-DD HH:mm")).toEqual(result12[0].output[2].format("YYYY-MM-DD HH:mm"))
 
     let result10 = splitWordWithPlusSign("จ. 11 โมง 20 นาที ")
     expect(dayNeed(1).hours(11).minute(20).format("YYYY-MM-DD HH:mm")).toEqual(result10[0].output[0].format("YYYY-MM-DD HH:mm"))
 
-    let result18 = splitWordWithPlusSign("อ.  ")
-    expect(dayNeed(2).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[0].format("YYYY-MM-DD HH:mm"))
+    let result18 = splitWordWithPlusSign("อ.  11:00 12.25  13:25 12.36")   
+    expect(dayNeed(2).hours(11).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[0].format("YYYY-MM-DD HH:mm"))
+    expect(dayNeed(2).hours(12).minute(25).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[1].format("YYYY-MM-DD HH:mm"))
+    expect(dayNeed(2).hours(13).minute(25).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[2].format("YYYY-MM-DD HH:mm"))
+    expect(dayNeed(2).hours(12).minute(36).format("YYYY-MM-DD HH:mm")).toEqual(result18[0].output[3].format("YYYY-MM-DD HH:mm"))
 
     let result19 = splitWordWithPlusSign("พ.  ")
     expect(dayNeed(3).hours(7).minute(00).format("YYYY-MM-DD HH:mm")).toEqual(result19[0].output[0].format("YYYY-MM-DD HH:mm"))
