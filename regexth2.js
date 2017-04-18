@@ -1,8 +1,6 @@
 Array.prototype.flatMap = function(lambda) { 
     return Array.prototype.concat.apply([], this.map(lambda)); 
 }
-// var text3 = [ '31 เมษายน','10 ไป10','7 โมงเช้า 6โมงเจอกัน ','10.00 บ่าย 3 บ่าย 4 โมง 3 ทุ่ม 9.56 น. ตี 2  6 โมงเย็น ','จันทร์ นี้ ไป โร 9 โมง  11:00 น.' ,'7 โมงงง','ธันวา',
-// 'มีนา 29 ไป สอบ 9 โมง ','วัน จันทร์ 10 โมง ไปโรบินสัน ไปตลาด วันอังคาร ไป 9โมง วันเสาร์','เมษา จ่ายค่าบ้าน ','วันที่  5มีนาคม  ',' ตอนเย็นวันจะไปกินข้าว',' พุทธ นี้ ไป แมคโคร ตอนตี 3',' ของวันมะรืน ','ในวันแรกของเดือนมกราจะไป ดูหนัง ','อีก 15 นาทีไป โร','อีก 15 นาทีหลังเที่ยงคืนของวันศุกร์จะนอน ','วันที่ 29 กุมภาพันธ์ เป็นวันเกิด','วันจันทร์ ที่ 12 เดือน กุมภา ไปนอก','วันศุกร์ 24 มีนา ','วันที่ 2  ธันวา','9:00 น. วันจันทร์คืนหนังสือนะ','วันที่ 12  11:00 นาฬิกา','15 เมษา','วัน อังคาร  24 พฤษภา']
 const cutNull = function (s){  
   return s!==null && s!==undefined 
 }
@@ -13,51 +11,11 @@ const isSpace = function(v){
 const cutNumber = function(v) {
   return !(/^[0-9]*$/.test(v))
 }
-
-
-function timeRegex(s) {
-    
-    s= s.replace(/[6-9][0-9](:|\.)([0-9][0-9]|[0-9])/g,'')
-    s= s.replace(/\d\d\d\d/g,'')
-    console.log(s)
-     const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-5])/gi
-     const regexTime22 = /(ตี|บ่าย)(   |  | |)([1-5])(   |  | |)([0-5][0-9]|[0-9]|)(   |  | |)นาที/gi
-     
-
-    
-     const regexTime33 = /([1-9]|[0-1][0-2])(   |  | |)(โมง|ทุ่ม)(   |  | |)(เย็น|เช้า|)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi    
-     const regexTime3 =  /([1-9]|[0-1][0-2])(   |  | |)(โมง|ทุ่ม)(เย็น|เช้า|)/gi 
-
-     const regexTime5 = /(1?[0-9]|2[0-3])(:|\.)[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
-     const regexTime55= /(1?[0-9]|2[0-3])(   |  | |)นาฬิกา(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi 
-
-     const regexTime4 = [ regexTime2,regexTime22,regexTime33, regexTime3, regexTime5 ,regexTime55 ]
-    
-     const resultTimeRegex = regexTime4.map((v)=>{                  
-        const a = s.match(v)         
-          if(a!==null)
-          a.map((ss)=>{           
-            s=s.replace(ss,"")
-          })         
-        console.log(s)
-        return a
-      }).filter(cutNull).flatMap( (v) => v )
-       
-   
-   console.log('resulttime',resultTimeRegex)   
-     return  resultTimeRegex
-}
  
-//for extract date from sentense parameter is array of sentense 
+//for extract date from  sentence  input is raw text 
 function splitDate (s) { 
-   // s=" วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที โรบินสัน  จันทร์ 8 โมง เรียนสัมนา ม.เกษตร ศรีราชา ไปเที่ยวทะเลพัทยา,ไหว้พระ พุทธมน 18:00"    
-     console.log(s)
-    //  var b = s.replace(/([1-2][0-9]|[0-9])(   |  | |)(โมง|นาฬิกา)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)(นาที)/gi,'')
-    //  var c = b.replace(/([1-2][0-9]|[0-9])(   |  | |)โมง/g,'') 
-    //  var d= c.replace(/[6-9][0-9](:|\.)([0-9][0-9]|[0-9])/g,'')
-    //  var a = d.replace(/(1?[0-9]|2[0-3])(:|\.)[0-5][0-9]/gi,'')   
-  //   a= "9 โมง เสาร์หน้า เดือนหน้า ปีหน้า 12-05-17   าาสกดาาสดก 23 ธ.ค 60 สดก่าดก31/01/60 31 ม.ค 60 12-5-17 31/1/60 17 มิถุนายน ไป จันทร์ อีก 2 สัปดาห์ ไป เกาหลี พัทยา ธันวาคม 25 คริสมาส เดือน สิงหาคม กลับ ม. 30 เดือน 4   31 ธันวาคม 2560 ไปเที่ยวนะ อีก 10 วัน ไปดรีมเวิล อีก 2 เดือน ไป สอบ อีก 1 ปี อย่าลืม 29 เดือน 4  วันมะรืน ะเเเกเหกดเ  มะรืน เหกดเด พรุ่งนี้ ดกดกดฟด วันพรุ่งนี้ดฟหด   วันนี้ดเกะั ดดกด 7-  10 พฤษภาคม"
-    let a = s
+     let a = s
+     console.log(a)
      if( /เดือน(   |  | |)([1-3][0-9]|[0-9])/g.test(a))
      {      
        a= a.replace(/เดือน(   |  | |)12/g,'ธันวาคม')
@@ -88,9 +46,15 @@ function splitDate (s) {
        a= a.replace(/ก.พ(\.|)/g,'กุมภา')
        a= a.replace(/ม.ค(\.|)/g,'มกราคม')
      }
-
-     console.log(a)
-  
+     if(/(อา\.|จ\.|พ\.|พฤ\.|ศ\.|ส\.|อา\.)/g.test(a)){
+        a= a.replace(/อา\./g,'วันอาทิตย์')
+       a= a.replace(/จ\./g,'วันจันทร์')
+       a= a.replace(/อ\./g,'วันอังคาร')
+       a= a.replace(/พ\./g,'วันพุธ')
+       a= a.replace(/พฤ\./g,'วันพฤหัสบดี')
+       a= a.replace(/ศ\./g,'วันศุกร์')
+       a= a.replace(/ส\./g,'วันเสาร์')
+     }
      const answer = {}
      const regexPattern = [ /^(เดือน|)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)(   |  | |)(\d\d\d\d|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(3[0-1]|[1-2][0-9]|[0-9]|)/gi     
      ,/^(เดือน|)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)(   |  | |)(\d\d\d\d|)(   |  | |)(3[0-1]|[1-2][0-9]|[0-9]|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)/gi
@@ -100,15 +64,16 @@ function splitDate (s) {
      ,/^(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(เดือน|)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)(   |  | |)(\d\d\d\d|)(   |  | |)(3[0-1]|[1-2][0-9]|[0-9]|)/gi 
      ,/^(\d\d|\d)\/(\d\d|\d)\/(\d\d|\d)/gi
      ,/^(\d\d|\d)-(\d\d|\d)-(\d\d|\d)/gi
-     ,/^วัน(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)/gi
+     ,/^วัน(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)/gi
      ,/^(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)/gi
      ,/^(วันนี้|วันพรุ่งนี้|วันมะรืน)/gi
      ,/^(\d\d|\d)(   |  | |)-(   |  | |)(\d\d|\d)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)/gi
      ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|เดือน|ปี)/gi     
+     ,/^วันที่(   |  | |)(\d\d|\d)/gi
      ]      
     let temp = a.substr(0)
     let anss = []
-    let st=""
+    let st="" //temp string while cutting word
     let stss = []
     while(temp.length>0)
     {      
@@ -119,8 +84,8 @@ function splitDate (s) {
       let tempb = resulRegex.map((v)=>v[0])      
       let mxi = -1
       let mxv = 0
-      //console.log(temp)
-      //console.log(tempb)
+      // console.log(temp)
+      // console.log(tempb)
       tempb.forEach((v,i)=>{           
             if(v.trim().length>mxv)
             {               
@@ -148,16 +113,17 @@ function splitDate (s) {
      }
   } 
   stss.push(st)
- stss= stss.filter((v)=>{
-    return v!==" "
-  })
-   console.log(a)
-   console.log(anss)
-   console.log(stss)
+  stss= stss.filter((v)=>{
+      return v!==" "
+    })
+   //console.log(a)
+  // console.log(anss)
+//   console.log(stss)
    
    //-----ตัดคำ
    let senti = []
    let sent = []
+   let flag = false
    anss.map((v)=>{
      senti.push(a.search(v))
    })
@@ -167,12 +133,19 @@ function splitDate (s) {
      //console.log(senti[i])
      //console.log(stss[i])
      if(i==0 && senti[i]!==0){
-       console.log(a)
+        flag=true
      }
      sent.push(a.substr(senti[i],senti[i+1]-senti[i]))
    }
-  
- return stss
+   if(flag==true){
+     if(stss.length){         
+        let tempStrArr = stss[0]+stss[1]
+        stss[1]=tempStrArr
+        stss=stss.splice(1)
+     } 
+   }
+   console.log(anss)  
+ return { output: stss.filter(isSpace) , keyword:anss }
 }
 
 function convertTimeToNumber( s ) {
@@ -415,7 +388,8 @@ function thaiRegexTime( v ) {
 
 function splitWordWithPlusSign(s){          
      
-    const input =  splitDate(s).filter(isSpace)
+    const input =  splitDate(s) 
+    
     console.log(input)
 
   //   if(input === undefined) {
@@ -486,4 +460,4 @@ console.log(splitWordWithPlusSign("วันจันทร์ 4 โมงเย
 console.log(splitWordWithPlusSign("3 ทุ่ม ซ้อมทีม"))
 console.log(splitWordWithPlusSign("วันจันทร์ 9 ไปเที่ยวกับแม่ ที่ จันทบุรี"))
 console.log(splitWordWithPlusSign("30 เดือน 4"))
-// console.log(splitWordWithPlusSign("31 ธ.ค 60"))
+console.log(splitWordWithPlusSign("31 ธ.ค 60"))
