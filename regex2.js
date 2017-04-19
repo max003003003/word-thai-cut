@@ -74,11 +74,10 @@ function spliteDate(s)
   valueB["วันอาทิตย์"]=9
   valueB["วันเสาร์"]=10 
   const output = regexes.map((v)=>{
-     const sa = s.match(v)
+   const sa = s.match(v)
           .filter(isSpace)
 
-   const removespace=sa.map((v)=> v.trim())
- 
+   const removespace=sa.map((v)=> v.trim()) 
    var removeDub=removespace.filter( function(item,pos,self){
             return self.indexOf(item) == pos
           })
