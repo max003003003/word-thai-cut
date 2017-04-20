@@ -365,7 +365,7 @@ function convertTime( s ) {
       } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้   
         //
             if(moment().isoWeekday() == date.date){  // วันอังคาร แบบ ไม่ระบุ เวลา เท่ากับ วันนี้ รึป่าว
-                if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) <= moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
+                if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) >= moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
                   //console.log('Match day of week',dateR)                
                     const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
                     return dateR
@@ -387,9 +387,7 @@ function convertTime( s ) {
                         const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
                          return dateR
                  }
-                //console.log('Match day of week 2',dateR)
-                
-               
+                //console.log('Match day of week 2',dateR)              
           }           
     } else  if( isNaN(date.datenumber) && date.date === undefined && date.month !== undefined)     {            // มีนาคม ==> วันแรก ของ เดือนนั้นๆ
             const dateR = moment().month(date.month).date(1).hour(parseInt(h)).minute(parseInt(m))
@@ -784,5 +782,7 @@ function splitWordWithPlusSign(s){
 //console.log(splitWordWithPlusSign("วันจันทร์ 22.30  วันอังคาร 11.25  วันศุกร์ 13.00 วันอาทิตย์ ไปกินข้าวตอน 10.45 11 โมง 45 นาที วันเสาร์ 13.20"))
 // console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ จันทร์1 พฤษภา 11.00 "))
 //console.log( splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 23 นาฬิกา 9 นาที "))
-console.log(splitWordWithPlusSign("ไปเที่ยวนะ จ๊ะๆๆๆๆ  17 มกราคม  โรบินสัน พัทยา 9 โมง 11.00 ไปเที่ยว 9 โมง 5 นาที  ตี 4  บ่าย 3 บ่าย 2 35 นาที  11 นาฬิกา 25 นาที    "))
-console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง"))
+//console.log(splitWordWithPlusSign("ไปเที่ยวนะ จ๊ะๆๆๆๆ  17 มกราคม  โรบินสัน พัทยา 9 โมง 11.00 ไปเที่ยว 9 โมง 5 นาที  ตี 4  บ่าย 3 บ่าย 2 35 นาที  11 นาฬิกา 25 นาที    "))
+//console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง"))
+console.log(splitWordWithPlusSign("วันพฤหัส 10.30"))
+//console.log(splitWordWithPlusSign("วัน "))
