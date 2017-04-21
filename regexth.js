@@ -37,7 +37,8 @@ const cutNumber = function(v) {
      ,/^ตี(   |  | |)[1-5](   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/g
      ,/^([1-2][0-9]|[0-9])(   |  | |)โมง/g
      ,/^(บ่าย|ตี|ทุ่ม|)(   |  | |)(1?[0-9]|2[0-3])(:|\.)[0-5][0-9](   |  | |)(นาฬิกา|น\.|)/g  
-     ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi]  
+     ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
+     ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(นาที|ชั่วโมง|ช\.ม|ชม\.)/gi     ]  
     let temp = s.substr(0)
     let anss = []
     let st="" //temp string while cutting word
@@ -108,12 +109,20 @@ function dateRegex (s) {
      ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi 
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi 
-     ,]      
-    const resulRegex = regexPattern.map((v)=> a.match(v).filter(isSpace))      
-    console.log(resulRegex)
-    const size = resulRegex.map((v)=> v.length )  
+     ,/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|เดือน|ปี)/gi]      
+    const resulRegex = regexPattern.map((v)=>{ 
+      
+   if( a.match(v)==undefined) return 0
+   else return a.match(v)
     
-    return resulRegex[size.indexOf(Math.min(...size))].map((c) => c.trim()).filter(cutNumber) 
+  }).filter(isSpace)     
+    console.log(resulRegex)
+    const size = resulRegex.map((v)=> {
+    if(v[0]==undefined) return -1
+    else return  v[0].length
+    
+  } )     
+    return resulRegex[size.indexOf(Math.max(...size))].map((c) => c.trim()).filter(cutNumber) 
 }
 
 function spliteDate(a)
@@ -249,12 +258,22 @@ function convertTimeToNumber( s ) {
      const toom = /ทุ่ม/
      const shao = /เช้า/
      const yen = /เย็น/       
+     const eek = /อีก/
      const ac= s.map( (v) =>{
         console.log(v)
            
      const timeR= v.match(timeNumber)    
-     
-     if( bai.test(v) || yen.test(v) ) {
+     if(eek.test(v)){
+       if(natee.test(v)){            
+            timeR.push(moment().add(parseInt(timeR),'minute').minute())
+            timeR[0]=moment().add(parseInt(timeR),'minute').hour()             
+            return createTimeWithCheck(timeR,0)
+       }else if(/ชั่วโมง|ช\.ม|ชม\./.test(v)){
+           timeR.push(moment().add(parseInt(timeR),'hour').minute())
+           timeR[0]=moment().add(parseInt(timeR),'hour').hour()            
+           return createTimeWithCheck(timeR,0)
+       }        
+     }else  if( bai.test(v) || yen.test(v) ) {
         
         return createTimeWithCheck(timeR,12)           
      }else if(tee.test(v)) {
@@ -299,8 +318,8 @@ function convertDateToNumber( s ) {   //return {input,[]result }
   
     const month = [/มกรา/,/กุมภา/,/มีนา/,/เมษา/,/พฤษภา/,/มิถุนา/,/กรกฎา/,/สิงหา/,/กันยา/,/ตุลา/,/พฤศจิกา/,/ธันวา/]
   
-    const datespec2 = datespec.map((v , j)=> {
-     
+
+    const datespec2 = datespec.map((v , j)=> {     
       if(v.test(s)!=false)
       {
         return j
@@ -326,6 +345,38 @@ function convertDateToNumber( s ) {   //return {input,[]result }
       else 
         return '' 
     }).filter(isSpace)     
+  
+  if(/อีก/.test(s))
+  {  //  const eek = [/วัน/,/สัปดาห์/,/เดือน/,/ปี/]
+       let dateNum ;
+       let dayWeek;
+       let monthNum;
+        
+
+
+    if(/วัน/.test(s))
+    { 
+        dateNumberresult[0]=moment().add(parseInt(dateNumberresult[0]),'day').date()
+        monthresult[0]=moment().add(parseInt(dateNumberresult[0]),'day').month()-1
+         dateresult[0]=NaN
+          
+    }else if(/สัปดาห์/.test(s)){
+        console.log(parseInt(dateNumberresult[0]))
+        dateNumberresult[0]=moment().add(parseInt(dateNumberresult[0]),'week').date()
+        monthresult[0]=moment().add(parseInt(dateNumberresult[0]),'week').month()-2
+        console.log(parseInt(dateNumberresult[0]),monthresult[0],moment().add(parseInt(dateNumberresult[0]),'week'))
+        
+        dateresult[0]=NaN
+    }else if(/เดือน/.test(s)){
+        dateNumberresult[0]=moment().add(parseInt(dateNumberresult[0]),'month').date()
+        monthresult[0]=moment().add(parseInt(dateNumberresult[0]),'month').month()
+        dateresult[0]=NaN
+    }else if(/ปี/.test(s)){
+        console.log('year')
+    }
+
+  }
+
     
   
   const result= { 'datenumber':  parseInt( dateNumberresult[0]) , 'date': dateresult[0] ,  'month': monthresult[0] ,'option': datespec2[0]  } //option คือ พวก วันนี้ พรุ่งนี้
@@ -355,9 +406,14 @@ function convertTime( s ) {
  function createTimeObject(date,h,m)
  {      
    console.log(date)
+   if( !isNaN(date.datenumber) && date.date !== undefined && date.month !== undefined )
+   {      
+          const dateR = moment().date(date.datenumber).month(date.month).hour(parseInt(h)).minute(parseInt(m))
+          return dateR
+   }
      
         // วันที่ 12  or  วัน จันทร์ ที่ 15  ==> เดือนนี้
-      if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {         
+    else  if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {         
 
          // console.log('Match Date number ',dateR)
           const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
@@ -475,8 +531,8 @@ function replaceabbreviation (s)
          
   s = s.replace(/วันนี้/g,'วนน.')
   s = s.replace(/วันที่/g,'วทท.')
-  s = s.replace(/วัน/g,'') 
-                  console.log(s);    
+  // s = s.replace(/วัน/g,'') 
+  //                 console.log(s);    
  
    word.forEach((v,i)=>{ 
           while ((match = v.exec(s)) != null) {
@@ -783,6 +839,11 @@ function splitWordWithPlusSign(s){
 // console.log(splitWordWithPlusSign("วันจันทร์ ไปซื้อของ 17 มกราคม โรบินสัน พัทยา วันอังคารไปเที่ยว นะ จันทร์1 พฤษภา 11.00 "))
 //console.log( splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 23 นาฬิกา 9 นาที "))
 //console.log(splitWordWithPlusSign("ไปเที่ยวนะ จ๊ะๆๆๆๆ  17 มกราคม  โรบินสัน พัทยา 9 โมง 11.00 ไปเที่ยว 9 โมง 5 นาที  ตี 4  บ่าย 3 บ่าย 2 35 นาที  11 นาฬิกา 25 นาที    "))
-//console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง"))
-console.log(splitWordWithPlusSign("วันพฤหัส 10.30"))
-//console.log(splitWordWithPlusSign("วัน "))
+// console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง"))
+ // console.log(splitWordWithPlusSign(" 10.30  อีก 5 นาที อีก 1 ชั่วโมง อีก 2 สัปดาห์"))
+ 
+//console.log( splitWordWithPlusSign("อา. 10.25 7 โมง 50 นาที 23 นาฬิกา 9 นาที "))
+//console.log(splitWordWithPlusSign("ไปเที่ยวนะ จ๊ะๆๆๆๆ  17 มกราคม  โรบินสัน พัทยา 9 โมง 11.00 ไปเที่ยว 9 โมง 5 นาที  ตี 4  บ่าย 3 บ่าย 2 35 นาที  11 นาฬิกา 25 นาที    "))
+// console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง"))
+ console.log(splitWordWithPlusSign(" 10.30  อีก 5 นาที อีก 1 ชั่วโมง อีก 2 สัปดาห์ โมง"))
+//console.log(splitWordWithPlusSign("วัน 10.25 "))
