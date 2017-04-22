@@ -31,8 +31,9 @@ const cutNumber = function(v) {
 // }
  function timeRegex(s) {    
       console.log(s)
-      s= s.replace(/เที่ยง/g,'12:00')
       s= s.replace(/เที่ยงคืน/g,'00:00')
+      s= s.replace(/เที่ยง/g,'12:00')
+      
 
      const regexTime4=[  /^([1-2][0-9]|[0-9])(   |  | |)(โมง|ทุ่ม)(   |  | |)(เย็น|เช้า|)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
      ,/^บ่าย(   |  | |)([1-5])(   |  | |)(โมง|)/gi
@@ -134,19 +135,17 @@ function dateRegex (s) {
 
 function spliteDate(a)
 { 
-
-   
-
-
-    a = a.replace('วันพ่อ','5 ธ.ค.')
-    a = a.replace('วันแม่','5 ส.ค.')
-    a = a.replace('วันปีใหม่','1 ม.ค.')
-    a  = a.replace('วันจักรี','5 พ.ค.')
+  if(a==undefined) return 
+    a  = a.replace('วันพ่อ','5 ธ.ค.')
+    a  = a.replace('วันแม่','12 ส.ค.')
+    a  = a.replace('วันปีใหม่','1 ม.ค.')
+    a  = a.replace('วันสงกรานต์','13 เม.ย. ')
+    a  = a.replace('วันจักรี','6 เม.ย.')
     a  = a.replace('วันปิย','23 ต.ค.')
     a  = a.replace('แรงงาน','1 พ.ค.')
     a  = a.replace('วันฉัตรมงคล​',' 5 พ.ค.')
     a  = a.replace('วันรัฐธรรมนูญ​',' 10 ธ.ค.')
-    a = a.replace('วันสิ้นปี','31 ธ.ค.')     
+    a  = a.replace('วันสิ้นปี','31 ธ.ค.')     
     
     if( /เดือน(   |  | |)([1-3][0-9]|[0-9])/g.test(a))
      {      
@@ -581,7 +580,8 @@ function mergeAndCreateDateAndTime ( time, date)
      }
 
 }
-function thaiRegexTime( v ) {      
+function thaiRegexTime( v ) {   
+          if(v==undefined) return   ""
           console.log(v)     
           const resultTime  = convertTimeToNumber(timeRegex(v.s))
           const resultDate =  convertDateToNumber(dateRegex(v.k))
@@ -608,8 +608,8 @@ function replaceabbreviation (s)
          
   s = s.replace(/วันนี้/g,'วนน.')
   s = s.replace(/วันที่/g,'วทท.')
-  // s = s.replace(/วัน/g,'') 
-  //                 console.log(s);    
+  s = s.replace(/วัน/g,'') 
+                  console.log(s);    
  
    word.forEach((v,i)=>{ 
           while ((match = v.exec(s)) != null) {
@@ -638,15 +638,43 @@ function replaceabbreviation (s)
 }
 function spacialcase(s){
   console.log(s)
-  //วันจันทร์ 9 โมง
+  
+  if(/(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(\d\d|\d)(   |  | |)(โมง|นาฬิกา)/.test(s)){
+      const cas = ['จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์','อาทิตย์']
+      cas.forEach((value,index)=>{
+        if(s.search(value)!=-1)
+        {
+         s= s.replace(value,value+" เวลา ")
+        }
+      })
+
+  }
+  if(/(บ่าย|ตี|)(   |  | |)([1-5])(   |  | |)(โมง|)(   |  | |)ครึ่ง/.test(s))
+  {
+     const a = s.match(/(บ่าย|ตี|)(   |  | |)([1-5]|\d\d)(   |  | |)(โมง|)(   |  | |)ครึ่ง/g)
+     a.map((v)=>{
+       s=s.replace('ครึ่ง','30 นาที')
+     })
+
+  }
+   if(/โมง(   |  | |)ตรง/.test(s))
+  {
+     const a = s.match(/โมง(   |  | |)ตรง/g)
+     a.map((v)=>{
+       s=s.replace('ตรง','')
+     })
+
+  }
+  
+  
   //เมษา 13.00
-
-
+return s
+ 
 }
 
 function splitWordWithPlusSign(s){     
     s= replaceabbreviation(s)
-   // s= spacialcase(s)
+     s= spacialcase(s)
     const input =  spliteDate(s)
   
     console.log(input)
@@ -931,4 +959,4 @@ function splitWordWithPlusSign(s){
 // console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง"))
  //console.log(splitWordWithPlusSign(" 10.30  อีก 5 นาที อีก 1 ชั่วโมง อีก 5 สัปดาห์ 5 โมง"))
 //console.log(splitWordWithPlusSign("วัน 10.25 "))
-console.log(splitWordWithPlusSign("เม.ย 13.00"))
+console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง บ่าย 2 ครึ่ง ตี 5 ครึ่ง  10 โมง ครึ่ง  11โมงตรง"))
