@@ -737,6 +737,14 @@ function spacialcase(s){
      })
 
   }
+  if(/พลบค่ำ/.test(s))
+  {
+     const a = s.match(/พลบค่ำ/g)
+     a.map((v)=>{
+       s=s.replace('พลบค่ำ','18:00')
+     })
+
+  }
   if(/ตอนค่ำ/.test(s))
   {
      const a = s.match(/ตอนค่ำ/g)
