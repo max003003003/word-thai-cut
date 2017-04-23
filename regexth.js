@@ -709,15 +709,15 @@ function spacialcase(s){
   {
      const a = s.match(/ตอนบ่าย/g)
      a.map((v)=>{
-       s=s.replace('ตอนบ่าย ','13:00')
+       s=s.replace('ตอนบ่าย ', daySets[1].format("HH:mm"))
      })
 
   }
   if(/ตอนเช้า/.test(s))
-  {
+  { 0
      const a = s.match(/ตอนเช้า/g)
      a.map((v)=>{
-       s=s.replace('ตอนเช้า','06:00')
+       s=s.replace('ตอนเช้า',daySets[0].format("HH:mm"))
      })
 
   }
@@ -725,7 +725,7 @@ function spacialcase(s){
   {
      const a = s.match(/ตอนเย็น/g)
      a.map((v)=>{
-       s=s.replace('ตอนเย็น','18:00')
+       s=s.replace('ตอนเย็น',daySets[2].format("HH:mm"))
      })
 
   }
@@ -734,6 +734,14 @@ function spacialcase(s){
      const a = s.match(/ตอนหัวค่ำ/g)
      a.map((v)=>{
        s=s.replace('ตอนหัวค่ำ','19:00')
+     })
+
+  }
+  if(/ตอนค่ำ/.test(s))
+  {
+     const a = s.match(/ตอนค่ำ/g)
+     a.map((v)=>{
+       s=s.replace('ตอนค่ำ',daySets[3].format("HH:mm"))
      })
 
   }
