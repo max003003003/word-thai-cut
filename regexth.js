@@ -462,6 +462,8 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     }
 
   }
+  
+  
     if(/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/.test(s) || /(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/.test(s) ){
       
      const dateformat=  s[0].match(/(\d\d\d\d|\d\d|\d)/g) 
@@ -480,9 +482,9 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     
      }else  {if(parseInt(dateformat[2])>50)
      {
-               year=parseInt(dateformat[2])-43
+               year=2000+parseInt(dateformat[2])-43
      }else{
-               year=dateformat[2]
+               year=2000+dateformat[2]
      }}
 
 
@@ -802,6 +804,13 @@ function spacialcase(s){
      })
 
   }
+   
+ 
+  if( /วันที่(   |  | |)(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/.test(s) || /วันที่(   |  | |)(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/.test(s) ){
+    s=s.replace('วันที่','')
+    console.log(s)
+  }
+
     s =  s.replace('หนึ่ง',' 1 ')
     s =  s.replace('สอง',' 2 ')
     s =  s.replace('สาม',' 3 ')
