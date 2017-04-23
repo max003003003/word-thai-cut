@@ -6,6 +6,17 @@
 // const regexDate = /วันที่(| |  |   )([1-9]|[0-9][0-9])/gi
 // const regexMonth = /(|เดือน)(| |  |   )(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา)(คม|ยน|)/gi
 // const regexDay3 = /(วัน|วันที่|)(   |  | |)(จันทร์|อังคาร|พุทธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(ที่)(   |  | |)([0-9]|[0-9][0-9]|)/gi
+let daySets = [moment().hour(7),moment().hour(13),moment().hour(18),moment().hour(23).minute(00),moment().hour(7)];
+function setDaysetting(obj){
+  daySets=[]
+  daySets.push(moment(obj.morning))
+  daySets.push(moment(obj.afternoon))
+  daySets.push(moment(obj.evening))
+  daySets.push(moment(obj.nigh))
+  daySets.push(moment(obj.other))
+
+}
+
 Array.prototype.flatMap = function(lambda) { 
     return Array.prototype.concat.apply([], this.map(lambda)); 
 }
@@ -416,10 +427,7 @@ function convertDateToNumber( s ) {   //return {input,[]result }
   {  //  const eek = [/วัน/,/สัปดาห์/,/เดือน/,/ปี/]
        let dateNum ;
        let dayWeek;
-       let monthNum;
-        
-
-
+       let monthNum;       
     if(/วัน/.test(s))
     {   let dd=moment().add(parseInt(dateNumberresult[0]),'d') 
         dateNumberresult[0]=dd.date()
@@ -579,12 +587,28 @@ function mergeAndCreateDateAndTime ( time, date)
        console.log(date)
           return  date.strDate.map((v) => {
               if( v ==='วันนี้'){
-                
+
+                time = daySets.filter((v) =>{
+                  if(v.hour() == moment().hour() ){ //next to compare minute
+                      if(v.minute() > moment().minute())
+                      {
+                        return moment().hour(v.hour).minute(v.minute())
+                      }
+                  } 
+                  if(v.hour() > moment().hour()){
+                    return moment().hour(v.hour()).minute(v.minute())
+                  }
+                 })
+              if(time.length!=0) //have result relate
+              {
+                time = time[0]
+                return createTimeObject(date.time,time.hour(),time.minute())
+              }
                  return createTimeObject(date.time,moment().hour(),moment().minute())
               }
               else 
               {
-                 return createTimeObject(date.time,7,0)
+                 return createTimeObject(date.time,daySets[4].hour(),0)
               }
            })
        
@@ -693,7 +717,7 @@ function spacialcase(s){
   {
      const a = s.match(/ตอนเช้า/g)
      a.map((v)=>{
-       s=s.replace('ตอนเช้า ','06:00')
+       s=s.replace('ตอนเช้า','06:00')
      })
 
   }
@@ -701,7 +725,7 @@ function spacialcase(s){
   {
      const a = s.match(/ตอนเย็น/g)
      a.map((v)=>{
-       s=s.replace('ตอนเย็น ','18:00')
+       s=s.replace('ตอนเย็น','18:00')
      })
 
   }
@@ -709,7 +733,7 @@ function spacialcase(s){
   {
      const a = s.match(/ตอนหัวค่ำ/g)
      a.map((v)=>{
-       s=s.replace('ตอนหัวค่ำ ','19:00')
+       s=s.replace('ตอนหัวค่ำ','19:00')
      })
 
   }
@@ -717,7 +741,7 @@ function spacialcase(s){
   {
      const a = s.match(/ตอนเช้ามืด/g)
      a.map((v)=>{
-       s=s.replace('ตอนเช้ามืด ','05:00')
+       s=s.replace('ตอนเช้ามืด','05:00')
      })
 
   }
@@ -1017,4 +1041,6 @@ function splitWordWithPlusSign(s){
  //console.log(splitWordWithPlusSign(" 10.30  อีก 5 นาที อีก 1 ชั่วโมง อีก 5 สัปดาห์ 5 โมง"))
  //console.log(splitWordWithPlusSign(" ไปไหนไม่รู้ ยู้วหูวว 10.25 "))
 //console.log(splitWordWithPlusSign("วันจันทร์ 9 โมง บ่าย 2 ครึ่ง ตี 5 ครึ่ง  10 โมง ครึ่ง  11โมงตรง 17 นาฬิกา"))
-console.log(splitWordWithPlusSign("วันปีใหม่ 10.25 ธธารส้เหวดหก้ดก้ด้ว"))
+//console.log(splitWordWithPlusSign("วันปีใหม่ 10.25 ธธารส้เหวดหก้ดก้ด้ว"))
+// console.log(splitWordWithPlusSign("วันนี้ "))
+//console.log(splitWordWithPlusSign("วันอาทิตย์"))
