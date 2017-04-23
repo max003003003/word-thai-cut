@@ -44,6 +44,7 @@ const cutNumber = function(v) {
       console.log(s)
       s= s.replace(/เที่ยงคืน/g,'00:00')
       s= s.replace(/เที่ยง/g,'12:00')
+      s=s.replace(/คืนนี้/g,'20.00')
       
 
      const regexTime4=[  /^([1-2][0-9]|[0-9])(   |  | |)(โมง|ทุ่ม)(   |  | |)(เย็น|เช้า|)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
@@ -56,6 +57,7 @@ const cutNumber = function(v) {
      ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
      ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา/gi
      ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(นาที|ชั่วโมง|ช\.ม|ชม\.)/gi
+     ,/^[1-5](  |  | |)ทุ่ม/gi
          ]  
     let temp = s.substr(0)
     let anss = []
@@ -128,8 +130,8 @@ function dateRegex (s) {
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi 
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi 
      ,/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|เดือน|ปี)/gi
-     ,/(\d\d|\d)\/(\d\d|\d)\/(\d\d|\d)/gi
-     ,/(\d\d|\d)-(\d\d|\d)-(\d\d|\d)/gi]      
+     ,/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/gi
+     ,/(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/gi]      
     const resulRegex = regexPattern.map((v)=>{ 
       
    if( a.match(v)==undefined) return 0
@@ -153,14 +155,19 @@ function spliteDate(a)
    
     a  = a.replace('วันพ่อ','5 ธ.ค.')
     a  = a.replace('วันแม่','12 ส.ค.')
-    a  = a.replace('วันปีใหม่','1 ม.ค.'+moment().year()+1)
-    a  = a.replace('วันสงกรานต์','13 เม.ย. ')
+    a  = a.replace('ปีใหม่','1 ม.ค.'+moment().add(1,'year').year())
+    a  = a.replace('สงกรานต์','13 เม.ย. ')
     a  = a.replace('วันจักรี','6 เม.ย.')
     a  = a.replace('วันปิย','23 ต.ค.')
     a  = a.replace('แรงงาน','1 พ.ค.')
     a  = a.replace('วันฉัตรมงคล​',' 5 พ.ค.')
     a  = a.replace('วันรัฐธรรมนูญ​',' 10 ธ.ค.')
     a  = a.replace('วันสิ้นปี','31 ธ.ค.')     
+    a  = a.replace('อาทิตย์หน้า',moment().add(7,'day').format('DD/MM/YYYY'))
+    a  = a.replace('สัปดาห์หน้า',moment().add(7,'day').format('DD/MM/YYYY'))
+    a  = a.replace('เดือนหน้า',moment().locale('th').add(1,'month').format("MMMM"))  
+    a  = a.replace('ปีหน้า',moment().add(1,'year').format('YYYY'))
+    
     
     if( /เดือน(   |  | |)([1-3][0-9]|[0-9])/g.test(a))
      {      
@@ -174,7 +181,7 @@ function spliteDate(a)
        a= a.replace(/เดือน(   |  | |)5/g,'พฤษภาคม')
        a= a.replace(/เดือน(   |  | |)4/g,'เมษายน')
        a= a.replace(/เดือน(   |  | |)3/g,'มีนาคม')
-       a= a.replace(/เดือน(   |  | |)2/g,'กุมภา')
+       a= a.replace(/เดือน(   |  | |)2/g,'กุมภาพันธ์')
        a= a.replace(/เดือน(   |  | |)1/g,'มกราคม')
      }
      if(/(ม\.ค|ก\.พ|มี\.น|เม\.ย|พ\.ค|มิ\.ย|ก\.ค|ส\.ค|ก\.ย|ต\.ค|พ\.ย|ธ\.ค)(\.|)/g.test(a))
@@ -189,7 +196,7 @@ function spliteDate(a)
        a= a.replace(/พ.ค(\.|)/g,'พฤษภาคม')
        a= a.replace(/เม.ย(\.|)/g,'เมษายน')
        a= a.replace(/มี.ค(\.|)/g,'มีนาคม')
-       a= a.replace(/ก.พ(\.|)/g,'กุมภา')
+       a= a.replace(/ก.พ(\.|)/g,'กุมภาพันธ์')
        a= a.replace(/ม.ค(\.|)/g,'มกราคม')
      }
      if(/(อา\.|จ\.|พ\.|พฤ\.|ศ\.|ส\.|อา\.)/g.test(a)){
@@ -210,8 +217,8 @@ function spliteDate(a)
      ,/^(3[0-1]|[1-2][0-9]|[0-9]|)(   |  | |)(เดือน|)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)(   |  | |)(\d\d\d\d|)(   |  | |)(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)/gi
      ,/^(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(3[0-1]|[1-2][0-9]|[0-9]|)(   |  | |)(เดือน|)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)(   |  | |)(\d\d\d\d|)/gi 
      ,/^(วัน|)(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(เดือน|)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)(   |  | |)(\d\d\d\d|)(   |  | |)(3[0-1]|[1-2][0-9]|[0-9]|)/gi 
-     ,/^(\d\d|\d)\/(\d\d|\d)\/(\d\d|\d)/gi
-     ,/^(\d\d|\d)-(\d\d|\d)-(\d\d|\d)/gi
+     ,/^(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/gi
+     ,/^(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/gi
      ,/^วัน(   |  | |)(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)/gi
      ,/^(จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)/gi
      ,/^(วันนี้|วันพรุ่งนี้|วันมะรืน)/gi
@@ -455,17 +462,30 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     }
 
   }
-    if(/(\d\d|\d)\/(\d\d|\d)\/(\d\d|\d)/.test(s) || /(\d\d|\d)-(\d\d|\d)-(\d\d|\d)/.test(s) ){
+    if(/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/.test(s) || /(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/.test(s) ){
       
-     const dateformat=  s[0].match(/(\d\d|\d)/g) 
+     const dateformat=  s[0].match(/(\d\d\d\d|\d\d|\d)/g) 
+     console.log(dateformat)
      dateNumberresult[0]=dateformat[0]
      monthresult[0]=dateformat[1]-1
-     if(parseInt(dateformat[2])>50)
+     if(dateformat[2].length==4){      
+     if(parseInt(dateformat[2])>2550)
      {
-               year=dateformat[2]-543
+          year=parseInt(dateformat[2])-543
+ 
+     }
+     else{
+         year=dateformat[2]
+     }
+    
+     }else  {if(parseInt(dateformat[2])>50)
+     {
+               year=parseInt(dateformat[2])-43
      }else{
                year=dateformat[2]
-     }
+     }}
+
+
     }
 
     
@@ -493,17 +513,29 @@ function convertTime( s ) {
      const regexTime2 = /(ตี|บ่าย)(   |  | |)([1-2][0-9]|[0-9])/gi
      const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
 }
-  
+ function addYear(date,mm)
+ {
+   if(date.year!==undefined)
+   {
+     return mm.year(date.year)
+   }else
+   {
+     return mm
+   }
+ }
  function createTimeObject(date,h,m)
  {      
-   if(date.datenumber==1&&date.month==0)
+   
+    if(date.datenumber==1&&date.month==0)
    {
-        const dateR = moment().date(1).month(0).add(1,'year').hour(parseInt(h)).minute(parseInt(m))
+        let dateR = moment().date(1).month(0).add(1,'year').hour(parseInt(h)).minute(parseInt(m))
+        dateR=addYear(date,dateR)
         return dateR
    }
   else if( !isNaN(date.datenumber) && date.date !== undefined && date.month !== undefined )
    {      
-          const dateR = moment().date(date.datenumber).month(date.month).hour(parseInt(h)).minute(parseInt(m))
+          let dateR = moment().date(date.datenumber).month(date.month).hour(parseInt(h)).minute(parseInt(m))
+          dateR=addYear(date,dateR)
           return dateR
    }
      
@@ -511,18 +543,21 @@ function convertTime( s ) {
     else  if( ( !isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) || ( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined ) ) {         
 
          // console.log('Match Date number ',dateR)
-          const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
+          let dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
+          dateR=addYear(date,dateR)
           return dateR
       } else if ( isNaN(date.datenumber) && date.date !== undefined && date.month === undefined) {  // วัน อังคาร   ==> เดือนนี้   
         //
             if(moment().isoWeekday() == date.date){  // วันอังคาร แบบ ไม่ระบุ เวลา เท่ากับ วันนี้ รึป่าว
                 if( moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m)) >= moment().isoWeekday(date.date)  ) {   //เชคเวลาว่า ผ่านไปรึยัง 
                   //console.log('Match day of week',dateR)                
-                    const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                    let dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                    dateR=addYear(date,dateR)
                     return dateR
                 }
                 else {            
-                  const dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
+                  let dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
+                  dateR=addYear(date,dateR)
                   return dateR 
                 }
             }              
@@ -531,25 +566,30 @@ function convertTime( s ) {
                  if(moment().isoWeekday(date.date)< moment()) //เช็คว่า วันนั้นๆในสัปดาห์ ผ่านมาแล้วหรือยัง ถ้าผ่านมาแล้ว จะ+1 week
                  {
                          
-                         const dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
+                         let dateR = moment().isoWeekday(date.date).add(1,'week').hour(parseInt(h)).minute(parseInt(m))
+                         dateR=addYear(date,dateR)
                           return dateR
 
                  }else  if(moment().isoWeekday(date.date)> moment()) {
-                        const dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                        let dateR = moment().isoWeekday(date.date).hour(parseInt(h)).minute(parseInt(m))
+                        dateR=addYear(date,dateR)
                          return dateR
                  }
                 //console.log('Match day of week 2',dateR)              
           }           
     } else  if( isNaN(date.datenumber) && date.date === undefined && date.month !== undefined)     {            // มีนาคม ==> วันแรก ของ เดือนนั้นๆ
-            const dateR = moment().month(date.month).date(1).hour(parseInt(h)).minute(parseInt(m))
+            let dateR = moment().month(date.month).date(1).hour(parseInt(h)).minute(parseInt(m))
+            dateR=addYear(date,dateR)
             console.log('Match Month  ',dateR)
             return dateR
     } else if( !isNaN(date.datenumber) && date.date !== undefined && date.month === undefined)   {          
-          const dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
+          let dateR = moment().date(date.datenumber).hour(parseInt(h)).minute(parseInt(m))
+          dateR=addYear(date,dateR)
           console.log('Match Date number ',dateR)
           return dateR
     } else if( ( !isNaN(date.datenumber) && date.date !== undefined && date.month !== undefined ) || (!isNaN(date.datenumber) && date.date === undefined && date.month !== undefined) )  {  //วัน จันทร์ 14 มีนา or 15 เมษา  => มีวันที่แล้ว
-          const dateR = moment().date(date.datenumber).month(date.month).hour(parseInt(h)).minute(parseInt(m))
+          let dateR = moment().date(date.datenumber).month(date.month).hour(parseInt(h)).minute(parseInt(m))
+          dateR=addYear(date,dateR)
           console.log('datenumber date month',dateR)
           return dateR
     } else if(  isNaN(date.datenumber) && date.date === undefined && date.month === undefined ) { //ไม่ระบุ วันที่  
@@ -570,7 +610,7 @@ function convertTime( s ) {
            
             dateR = moment().hour(parseInt(h)).minute(parseInt(m))   
            }                  
-               
+        dateR=addYear(date,dateR)
         return dateR
       }
 }
@@ -623,6 +663,7 @@ function thaiRegexTime( v ) {
           //console.log("-----------------------------------------")
           //console.log('input ',v)         
           const a = mergeAndCreateDateAndTime(resultTime,resultDate)
+       
           // console.log('output',a)
           //console.log("-----------------------------------------")
           const result =  {'input': v.s , 'output': a ,'resultdate':resultDate.strDate,'resultTime':resultTime.input }
@@ -761,6 +802,15 @@ function spacialcase(s){
      })
 
   }
+    s =  s.replace('หนึ่ง',' 1 ')
+    s =  s.replace('สอง',' 2 ')
+    s =  s.replace('สาม',' 3 ')
+    s =  s.replace('สี่',' 4 ')
+    s =  s.replace('ห้า',' 5 ')
+    s =  s.replace('หก',' 6 ')
+    s =  s.replace('เจ็ด',' 7 ')
+    s =  s.replace('แปด',' 8 ')
+    s =  s.replace('เก้า',' 9 ')
     
 return s
  
