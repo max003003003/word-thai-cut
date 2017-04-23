@@ -167,6 +167,22 @@ function spliteDate(a)
     a  = a.replace('สัปดาห์หน้า',moment().add(7,'day').format('DD/MM/YYYY'))
     a  = a.replace('เดือนหน้า',moment().locale('th').add(1,'month').format("MMMM"))  
     a  = a.replace('ปีหน้า',moment().add(1,'year').format('YYYY'))
+
+    if(/(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา)/.test(a))
+    {
+       a= a.replace(/ธันวา/,'ธันวาคม')
+       a= a.replace(/พฤษจิ/,'พฤษจิกา')
+       a= a.replace(/ตุลา/,'ตุลาคม')
+       a= a.replace(/กันยา/,'กันยายน')
+       a= a.replace(/สิงหา/,'สิงหาคม')
+       a= a.replace(/กรกฎา/,'กรกฎาคม')
+       a= a.replace(/มิถุนา/,'มิถุนายน')
+       a= a.replace(/พฤษภา/,'พฤษภาคม')
+       a= a.replace(/เมษา/,'เมษายน')
+       a= a.replace(/มีนา/,'มีนาคม')
+       a= a.replace(/กุมภา/,'กุมภาพันธ์')
+       a= a.replace(/มกรา/,'มกราคม')
+    }
     
     
     if( /เดือน(   |  | |)([1-3][0-9]|[0-9])/g.test(a))
