@@ -486,15 +486,13 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     }
 
   }
-    if(/\d\d\d\d/.test(s)){
-       
+    if(/\d\d\d\d/.test(s)){       
       year=parseInt(s[0].match(/\d\d\d\d/))
-        if(year>2550)
+      if(year>2550)
      {
           year=year-543
  
-     }
-     
+     }     
     }
 
     if(/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/.test(s) || /(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/.test(s) ){
@@ -801,7 +799,7 @@ function spacialcase(s){
   {
      const a = s.match(/เที่ยง(   |  | |)ครึ่ง/)
      a.map((v)=>{
-       s=s.replace('ครึ่ง','30 นาที')
+       s=s.replace(/เที่ยง(   |  | |)ครึ่ง/,'12:30')
      })
 
   }
@@ -809,7 +807,7 @@ function spacialcase(s){
   {
      const a = s.match(/เที่ยงคืน(   |  | |)ครึ่ง/)
      a.map((v)=>{
-       s=s.replace('ครึ่ง','30 นาที')
+       s=s.replace(/เที่ยงคืน(   |  | |)ครึ่ง/,'00:30')
      })
 
   }
