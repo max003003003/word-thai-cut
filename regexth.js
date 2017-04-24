@@ -771,59 +771,67 @@ function spacialcase(s){
      })
 
   }
-  if(/ตอนบ่าย/.test(s))
+  if(/(ตอน|ช่วง)บ่าย/.test(s))
   {
-     const a = s.match(/ตอนบ่าย/g)
+     const a = s.match(/(ตอน|ช่วง)บ่าย/g)
      a.map((v)=>{
-       s=s.replace('ตอนบ่าย ', daySets[1].format("HH:mm"))
+       s=s.replace(/(ตอน|ช่วง)บ่าย/, daySets[1].format("HH:mm"))
      })
 
   }
-  if(/ตอนเช้า/.test(s))
+  if(/(ตอน|ช่วง)เช้า/.test(s))
   { 0
-     const a = s.match(/ตอนเช้า/g)
+     const a = s.match(/(ตอน|ช่วง)เช้า/g)
      a.map((v)=>{
-       s=s.replace('ตอนเช้า',daySets[0].format("HH:mm"))
+       s=s.replace(/(ตอน|ช่วง)เช้า/,daySets[0].format("HH:mm"))
      })
 
   }
-  if(/ตอนเย็น/.test(s))
+  if(/(ตอน|ช่วง)เย็น/.test(s))
   {
-     const a = s.match(/ตอนเย็น/g)
+     const a = s.match(/(ตอน|ช่วง)เย็น/g)
      a.map((v)=>{
-       s=s.replace('ตอนเย็น',daySets[2].format("HH:mm"))
+       s=s.replace(/(ตอน|ช่วง)เย็น/,daySets[2].format("HH:mm"))
      })
 
   }
-  if(/ตอนหัวค่ำ/.test(s))
+  if(/(ตอน|ช่วง)หัวค่ำ/.test(s))
   {
-     const a = s.match(/ตอนหัวค่ำ/g)
+     const a = s.match(/(ตอน|ช่วง)หัวค่ำ/g)
      a.map((v)=>{
-       s=s.replace('ตอนหัวค่ำ','19:00')
+       s=s.replace(/(ตอน|ช่วง)หัวค่ำ/,'19:00')
      })
 
   }
-  if(/พลบค่ำ/.test(s))
+  if(/(ตอน|ช่วง|)พลบค่ำ/.test(s))
   {
-     const a = s.match(/พลบค่ำ/g)
+     const a = s.match(/(ตอน|ช่วง|)พลบค่ำ/g)
      a.map((v)=>{
-       s=s.replace('พลบค่ำ','18:00')
+       s=s.replace(/(ตอน|ช่วง|)พลบค่ำ/,'18:00')
      })
 
   }
-  if(/ตอนค่ำ/.test(s))
+  if(/(ตอน|ช่วง|หัว|)ค่ำ/.test(s))
   {
-     const a = s.match(/ตอนค่ำ/g)
+     const a = s.match(/(ตอน|ช่วง)ค่ำ/g)
      a.map((v)=>{
-       s=s.replace('ตอนค่ำ',daySets[3].format("HH:mm"))
+       s=s.replace(/(ตอน|ช่วง)ค่ำ/,daySets[3].format("HH:mm"))
      })
 
   }
-  if(/ตอนเช้ามืด/.test(s))
+  if(/(ตอน|ช่วง)เช้ามืด/.test(s))
   {
-     const a = s.match(/ตอนเช้ามืด/g)
+     const a = s.match(/(ตอน|ช่วง)เช้ามืด/g)
      a.map((v)=>{
-       s=s.replace('ตอนเช้ามืด','05:00')
+       s=s.replace(/(ตอน|ช่วง)เช้ามืด/,'05:00')
+     })
+
+  }
+  if(/คืนนี้/.test(s))
+  {
+     const a = s.match(/คืนนี้/g)
+     a.map((v)=>{
+       s=s.replace(/คืนนี้/,'20:00')
      })
 
   }
