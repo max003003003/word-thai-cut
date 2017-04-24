@@ -129,7 +129,7 @@ function dateRegex (s) {
      ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)/gi 
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi 
-     ,/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|เดือน|ปี)/gi
+     ,/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/gi
      ,/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/gi
      ,/(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/gi]      
     const resulRegex = regexPattern.map((v)=>{ 
@@ -240,7 +240,7 @@ function spliteDate(a)
      ,/^(วันนี้|วันพรุ่งนี้|วันมะรืน)/gi
      ,/^(พรุ่งนี้|มะรืน)/gi
      ,/^(\d\d|\d)(   |  | |)-(   |  | |)(\d\d|\d)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)/gi
-     ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|เดือน|ปี)/gi     
+     ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/gi     
      ,/^วันที่(   |  | |)(\d\d|\d)/gi
      ]      
     let temp = a.substr(0)
@@ -455,12 +455,14 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     {   let dd=moment().add(parseInt(dateNumberresult[0]),'d') 
         dateNumberresult[0]=dd.date()
         monthresult[0]=dd.month()  
+        year=dd.year()
         dateresult[0]=NaN
           
-    }else if(/สัปดาห์/.test(s)){
+    }else if(/(สัปดาห์|อาทิตย์)/.test(s)){
          let dd=moment().add(parseInt(dateNumberresult[0]),'w') 
         dateNumberresult[0]= dd.date()
         monthresult[0]=dd.month() 
+         year=dd.year()
      
         
         dateresult[0]=NaN
@@ -468,6 +470,7 @@ function convertDateToNumber( s ) {   //return {input,[]result }
       let dd=moment().add(parseInt(dateNumberresult[0]),'M') 
         dateNumberresult[0]=dd.date()
         monthresult[0]=dd.month()
+         year=dd.year()
         dateresult[0]=NaN
     }else if(/ปี/.test(s)){
         let dd=moment().add(parseInt(dateNumberresult[0]),'Y') 
@@ -691,6 +694,10 @@ function thaiRegexTime( v ) {
 function replaceabbreviation (s)
 {
    console.log(s)
+   if(/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)อาทิตย์/.test(s))
+   {
+     return s
+   }
    
    const word = [/จ\./g,/อ\./g,/พ\./g,/พฤ\./g,/ศ\./g,/ส\./g,/อา\./g,/วนน\./g,/วพนน\./g,/วมรร\./g,/วทท\./g]
   //  const word2 =[/จันทร์/gi,/อังคาร/gi,/พุธ/gi,/พฤหัส/gi,/ศุกร์/gi,/เสาร์/gi,/อาทิตย์/gi,/พรุ่งนี้/gi,/มะรืน/gi]
