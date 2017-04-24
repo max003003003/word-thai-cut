@@ -52,7 +52,7 @@ const cutNumber = function(v) {
      ,/^บ่าย(   |  | |)([1-5])(   |  | |)(โมง|)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
      ,/^ตี(   |  | |)[1-5]/g
      ,/^ตี(   |  | |)[1-5](   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/g
-     ,/^([1-2][0-9]|[0-9])(   |  | |)โมง/g
+     ,/^([1-2][0-9]|[0-9])(   |  | |)โมง(   |  | |)(เย็น|เช้า|)/g
      ,/^(บ่าย|ตี|ทุ่ม|)(   |  | |)(1?[0-9]|2[0-3])(:|\.)[0-5][0-9](   |  | |)(นาฬิกา|น\.|)/g  
      ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
      ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา/gi
@@ -340,7 +340,7 @@ function spliteDate(a)
 
 }
 function createTimeWithCheck( timeR, hr   ){
-   
+    
     if(timeR.length==2){
               return { 'H':(parseInt( timeR[0])+hr).toString() , 'm':timeR[1] }
     }else {
@@ -373,7 +373,10 @@ function convertTimeToNumber( s ) {
            timeR[0]=moment().add(parseInt(timeR),'hour').hour()            
            return createTimeWithCheck(timeR,0)
        }        
-     }else  if( bai.test(v) || yen.test(v) ) {
+     }else if(shao.test(v)){
+          return createTimeWithCheck(timeR,6)
+     }
+     else  if( bai.test(v) || yen.test(v) ) {
         
         return createTimeWithCheck(timeR,12)           
      }else if(tee.test(v)) {
