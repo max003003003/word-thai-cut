@@ -376,6 +376,9 @@ function convertTimeToNumber( s ) {
            return createTimeWithCheck(timeR,0)
        }        
      }else if(shao.test(v)){
+          if(timeR[0]==6)
+          return createTimeWithCheck(timeR,0)
+
           return createTimeWithCheck(timeR,6)
      }
      else  if( bai.test(v) || yen.test(v) ) {
@@ -489,12 +492,13 @@ function convertDateToNumber( s ) {   //return {input,[]result }
     if(/\d\d\d\d/.test(s)){       
       year=parseInt(s[0].match(/\d\d\d\d/))
       if(year>2550)
-     {
+      {
           year=year-543
- 
-     }     
+  
+      }     
+     
     }
-
+   console.log(year)
     if(/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/.test(s) || /(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/.test(s) ){
       
      const dateformat=  s[0].match(/(\d\d\d\d|\d\d|\d)/g) 
