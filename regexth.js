@@ -876,6 +876,14 @@ function spacialcase(s){
      })
 
   }
+ 
+  if(/ค่ำนี้/.test(s)){
+     const a = s.match(/ค่ำนี้/g)
+     a.map((v)=>{
+       s=s.replace(/ค่ำนี้/,'19:00')
+     })
+
+  }
   if(/(ตอน|ช่วง|หัว|)ค่ำ/.test(s))
   {
      const a = s.match(/(ตอน|ช่วง)ค่ำ/g)
@@ -892,6 +900,7 @@ function spacialcase(s){
      })
 
   }
+  
   if(/คืนนี้/.test(s))
   {
      const a = s.match(/คืนนี้/g)
