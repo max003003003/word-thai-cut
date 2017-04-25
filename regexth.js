@@ -6,6 +6,7 @@
 // const regexDate = /วันที่(| |  |   )([1-9]|[0-9][0-9])/gi
 // const regexMonth = /(|เดือน)(| |  |   )(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา)(คม|ยน|)/gi
 // const regexDay3 = /(วัน|วันที่|)(   |  | |)(จันทร์|อังคาร|พุทธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์)(   |  | |)(ที่)(   |  | |)([0-9]|[0-9][0-9]|)/gi
+let daymore,monthmore,yearmore
 let daySets = [moment().hour(7),moment().hour(13),moment().hour(18),moment().hour(23).minute(00),moment().hour(7)];
 function setDaysetting(obj){
   daySets=[]
@@ -130,7 +131,7 @@ function dateRegex (s) {
      ,/(วันที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(\d\d\d\d|)(   |  | |)(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|)(   |  | |)(แรก|พรุ่งนี้|มะรืน|)/gi
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(\d\d\d\d|)/gi 
      ,/(วันนี้|วัน|)(   |  | |)(จันทร์|อังคาร|พุทธ|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์|แรก|พรุ่งนี้|มะรืน|)(   |  | |)(เดือน|ของเดือน|)(   |  | |)(มกรา|กุมภา|มีนา|เมษา|พฤษภา|มิถุนา|กรกฎา|สิงหา|กันยา|ตุลา|พฤศจิกา|ธันวา|)(   |  | |)(คม|ยน|)(   |  | |)(\d\d\d\d|)(   |  | |)(ที่|)(   |  | |)([1-3][0-9]|[0-9]|)/gi 
-     ,/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/gi
+     ,/อีก(   |  | |)(\d\d\d\d|\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/gi
      ,/(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d|\d)/gi
      ,/(\d\d|\d)-(\d\d|\d)-(\d\d\d\d|\d\d|\d)/gi]      
     const resulRegex = regexPattern.map((v)=>{ 
@@ -150,7 +151,7 @@ function dateRegex (s) {
 
 function spliteDate(a)
 { 
-    console.log(a)
+    
     let tempForNull = a.substr(0)
   if(a==undefined) return
    
@@ -243,7 +244,7 @@ function spliteDate(a)
      ,/^(วันนี้|วันพรุ่งนี้|วันมะรืน)/gi
      ,/^(พรุ่งนี้|มะรืน)/gi
      ,/^(\d\d|\d)(   |  | |)-(   |  | |)(\d\d|\d)(   |  | |)(มกราคม|กุมภา|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)/gi
-     ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/gi     
+     ,/^อีก(   |  | |)(\d\d\d\d|\d\d\d|\d\d|\d)(   |  | |)(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/gi     
      ,/^วันที่(   |  | |)(\d\d|\d)/gi
      ]      
     let temp = a.substr(0)
@@ -368,23 +369,35 @@ function convertTimeToNumber( s ) {
            
      const timeR= v.match(timeNumber)    
      if(eekhm.test(v)){
-       const s = v.match(/(\d\d\d|\d\d|\d)/g)
-       console.log(timeR)
+        
+       const s = v.match(/(\d\d\d|\d\d|\d)/g)     
+         
               const dd = moment().add(parseInt(s[0]),'hour').add(parseInt(s[1]),'minute') 
               timeR[1]=dd.minute()
               timeR[0]=dd.hour() 
-              console.log(timeR)       
+              daymore=dd.date()
+              monthmore=dd.month()
+              yearmore=dd.year()                   
               return createTimeWithCheck(timeR,0)
         
 
      }else if(eek.test(v)){
         if(natee.test(v)){            
-              timeR.push(moment().add(parseInt(timeR),'minute').minute())
-              timeR[0]=moment().add(parseInt(timeR),'minute').hour()             
+              const dd =moment().add(parseInt(timeR),'minute')
+              timeR.push(dd.minute())
+              timeR[0]=dd.hour()     
+              daymore=dd.date()
+              monthmore=dd.month()
+              yearmore=dd.year()
+
               return createTimeWithCheck(timeR,0)
         }else if(/ชั่วโมง|ช\.ม|ชม\./.test(v)){
-            timeR.push(moment().add(parseInt(timeR),'hour').minute())
-            timeR[0]=moment().add(parseInt(timeR),'hour').hour()            
+            const dd =moment().add(parseInt(timeR),'hour')
+            timeR.push(dd.minute())
+            timeR[0]=dd.hour()    
+              daymore=dd.date()
+              monthmore=dd.month()
+              yearmore=dd.year()        
             return createTimeWithCheck(timeR,0)
         }        
       }
@@ -433,10 +446,11 @@ function convertTimeToNumber( s ) {
 }
 
 function convertDateToNumber( s ) {   //return {input,[]result }
+    console.log(s)
      
     const date = [/จันทร์/,/อังคาร/,/พุธ/,/พฤหัส/,/ศุกร์/,/เสาร์/,/อาทิตย์/]
     const datespec = [/วันนี้/,/พรุ่งนี้/,/มะรืน/]     
-    const dateNumbers = /(\d\d|\d)/
+    const dateNumbers = /(\d\d\d\d|\d\d\d|\d\d|\d)/
   
     const month = [/มกรา/,/กุมภา/,/มีนา/,/เมษา/,/พฤษภา/,/มิถุนา/,/กรกฎา/,/สิงหา/,/กันยา/,/ตุลา/,/พฤศจิกา/,/ธันวา/]
   
@@ -467,14 +481,15 @@ function convertDateToNumber( s ) {   //return {input,[]result }
       else 
         return '' 
     }).filter(isSpace)     
-  
+  console.log(s)
   if(/อีก/.test(s))
   {  //  const eek = [/วัน/,/สัปดาห์/,/เดือน/,/ปี/]
        let dateNum ;
        let dayWeek;
        let monthNum;       
     if(/วัน/.test(s))
-    {   let dd=moment().add(parseInt(dateNumberresult[0]),'d') 
+    { 
+        let dd=moment().add(parseInt(dateNumberresult[0]),'d') 
         dateNumberresult[0]=dd.date()
         monthresult[0]=dd.month()  
         year=dd.year()
@@ -502,8 +517,7 @@ function convertDateToNumber( s ) {   //return {input,[]result }
         year=dd.year()
     }
 
-  }
-    if(/\d\d\d\d/.test(s)){       
+  }else    if(/\d\d\d\d/.test(s)){       
       year=parseInt(s[0].match(/\d\d\d\d/))
       if(year>2550)
       {
@@ -565,12 +579,32 @@ function convertTime( s ) {
      const regexTime3 = /(1?[0-9]|2[0-3]):[0-5][0-9](   |  | |)(นาฬิกา|น.|)/gi
 }
  function addYear(date,mm)
- {
+ {  console.log(date,daymore,monthmore,yearmore)
+   if(date!==undefined && daymore!=date.datenumber)
+   {
+      
+     date.datenumber=daymore
+     mm.date(daymore)
+      
+   }
+   if(monthmore!==undefined && monthmore!=date.month)
+   {
+     date.month=monthmore
+     mm.month(monthmore)
+   }
+   
    if(date.year!==undefined)
    {
+     if(yearmore!==undefine && mm.year!==yearmore)
+     {
+       return mm.year(yearmore)
+     }
      return mm.year(date.year)
    }else
    {
+      if(yearmore!==undefined)
+           return mm.year(yearmore)
+
      return mm
    }
  }
@@ -662,6 +696,7 @@ function convertTime( s ) {
             dateR = moment().hour(parseInt(h)).minute(parseInt(m))   
            }                  
         dateR=addYear(date,dateR)
+        console.log(dateR)
         return dateR
       }
 }
