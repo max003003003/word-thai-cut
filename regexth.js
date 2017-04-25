@@ -58,6 +58,7 @@ const cutNumber = function(v) {
      ,/^(1?[0-9]|2[0-3])(   |  | |)นาฬิกา/gi
      ,/^อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(นาที|ชั่วโมง|ช\.ม|ชม\.)/gi
      ,/^[1-5](  |  | |)ทุ่ม/gi
+     ,/อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(ชั่วโมง|ช\.ม|ชม\.)(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)นาที/gi
          ]  
     let temp = s.substr(0)
     let anss = []
@@ -361,21 +362,34 @@ function convertTimeToNumber( s ) {
      const shao = /เช้า/
      const yen = /เย็น/       
      const eek = /อีก/
+     const eekhm = /อีก(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)(ชั่วโมง|ช\.ม|ชม\.)(   |  | |)(\d\d\d|\d\d|\d)(   |  | |)นาที/  
      const ac= s.map( (v) =>{
         console.log(v)
            
      const timeR= v.match(timeNumber)    
-     if(eek.test(v)){
-       if(natee.test(v)){            
-            timeR.push(moment().add(parseInt(timeR),'minute').minute())
-            timeR[0]=moment().add(parseInt(timeR),'minute').hour()             
+     if(eekhm.test(v)){
+       const s = v.match(/(\d\d\d|\d\d|\d)/g)
+       console.log(timeR)
+              const dd = moment().add(parseInt(s[0]),'hour').add(parseInt(s[1]),'minute') 
+              timeR[1]=dd.minute()
+              timeR[0]=dd.hour() 
+              console.log(timeR)       
+              return createTimeWithCheck(timeR,0)
+        
+
+     }else if(eek.test(v)){
+        if(natee.test(v)){            
+              timeR.push(moment().add(parseInt(timeR),'minute').minute())
+              timeR[0]=moment().add(parseInt(timeR),'minute').hour()             
+              return createTimeWithCheck(timeR,0)
+        }else if(/ชั่วโมง|ช\.ม|ชม\./.test(v)){
+            timeR.push(moment().add(parseInt(timeR),'hour').minute())
+            timeR[0]=moment().add(parseInt(timeR),'hour').hour()            
             return createTimeWithCheck(timeR,0)
-       }else if(/ชั่วโมง|ช\.ม|ชม\./.test(v)){
-           timeR.push(moment().add(parseInt(timeR),'hour').minute())
-           timeR[0]=moment().add(parseInt(timeR),'hour').hour()            
-           return createTimeWithCheck(timeR,0)
-       }        
-     }else if(shao.test(v)){
+        }        
+      }
+     
+     else if(shao.test(v)){
           if(timeR[0]==6)
           return createTimeWithCheck(timeR,0)
 
