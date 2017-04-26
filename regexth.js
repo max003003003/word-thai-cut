@@ -403,7 +403,7 @@ function convertTimeToNumber( s ) {
       }
      
      else if(shao.test(v)){
-          if(timeR[0]==6)
+          if(timeR[0]==6||timeR[0]>6)
           return createTimeWithCheck(timeR,0)
 
           return createTimeWithCheck(timeR,6)
@@ -595,7 +595,7 @@ function convertTime( s ) {
    
    if(date.year!==undefined)
    {
-     if(yearmore!==undefine && mm.year!==yearmore)
+     if(yearmore!==undefined && mm.year!==yearmore)
      {
        return mm.year(yearmore)
      }
