@@ -43,11 +43,12 @@ const cutNumber = function(v) {
 // }
  function timeRegex(s) {    
       console.log(s)
-      s= s.replace(/เที่ยงคืน/g,'00:00')
-      s= s.replace(/เที่ยง/g,'12:00')
+      s= s.replace(/เที่ยงคืน/g,'00 โมง')
+      s= s.replace(/เที่ยง/g,'12 โมง')
       s=s.replace(/คืนนี้/g,'20.00')
-      
-
+      s=s.replace(/24/,'24')
+      console.log(s)  
+    
      const regexTime4=[  /^([1-2][0-9]|[0-9])(   |  | |)(โมง|ทุ่ม)(   |  | |)(เย็น|เช้า|)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
      ,/^บ่าย(   |  | |)([1-5])(   |  | |)(โมง|)/gi
      ,/^บ่าย(   |  | |)([1-5])(   |  | |)(โมง|)(   |  | |)([0-5][0-9]|[0-9])(   |  | |)นาที/gi
@@ -252,18 +253,18 @@ function spliteDate(a)
     let st="" //temp string while cutting word
     let stss = []
     let finalanss = []
-      let aaa , b
+    let aaa , b
     while(temp.length>0)
     {      
-      const resulRegex = regexPattern.map((v)=> {
+      const resulRegex = regexPattern.map((v)=>{
       return v.exec(temp)
       }).filter((v)=> v!= null)
       //console.log(resulRegex)
       let tempb = resulRegex.map((v)=>v[0])      
       let mxi = -1
       let mxv = 0
-         console.log(temp)
-        console.log(tempb)
+      console.log(temp)
+      console.log(tempb)
       tempb.forEach((v,i)=>{           
             if(v.trim().length>mxv)
             {               
@@ -963,7 +964,7 @@ function spacialcase(s){
     s=s.replace('วันที่','')
     console.log(s)
   }
-
+    
     s =  s.replace('หนึ่ง',' 1 ')
     s =  s.replace('สอง',' 2 ')
     s =  s.replace('สาม',' 3 ')
@@ -979,6 +980,7 @@ return s
 }
 
 function splitWordWithPlusSign(s){     
+    const b=s.substr(0)
      s= replaceabbreviation(s)
      s= spacialcase(s)
     const input =  spliteDate(s)
@@ -1000,7 +1002,7 @@ function splitWordWithPlusSign(s){
         return aa
         }
     }
-          
+    console.log(b)
    return  input.map( v =>  thaiRegexTime(v) )    
 }
 
